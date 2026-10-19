@@ -13,9 +13,13 @@ const FONTS = {
   "instrument-serif-400-italic.woff2": "@fontsource/instrument-serif/files/instrument-serif-latin-400-italic.woff2",
   "archivo-wdth.woff2": "@fontsource-variable/archivo/files/archivo-latin-wdth-normal.woff2",
 };
+const DESC = "Lookbook voor herfst en winter 2026: looks, stukken en prijzen uit Zara, Massimo Dutti, Uniqlo en meer.";
+const ICON = `data:image/svg+xml,${encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><rect width="32" height="32" fill="#0D0D0C"/><text x="16" y="24" font-family="Georgia,serif" font-style="italic" font-size="24" fill="#F6F6F3" text-anchor="middle">G</text></svg>')}`;
 const doc = (title: string, body: string, base = "") => `<!doctype html>
 <html lang="nl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="robots" content="noindex"><title>${title}</title><link rel="stylesheet" href="${base}app.css"></head>
+<meta name="robots" content="noindex"><title>${title}</title><meta name="description" content="${DESC}">
+<meta property="og:title" content="${title}"><meta property="og:description" content="${DESC}"><meta name="twitter:card" content="summary">
+<link rel="icon" href="${ICON}"><link rel="stylesheet" href="${base}app.css"></head>
 <body>${body}</body></html>
 `;
 
@@ -28,7 +32,7 @@ for (const [key, title] of Object.entries(PEOPLE)) {
   mkdirSync(`${out}/fonts`, { recursive: true });
   await build({ entryPoints: [`src/ts/entries/${key}.ts`], bundle: true, minify: true, format: "iife", target: "es2020", outfile: `${out}/app.js` });
   writeFileSync(`${out}/app.css`, css);
-  const page = fragment.replace("{{NAME}}", title);
+  const page = fragment.replaceAll("{{NAME}}", title);
   writeFileSync(`${out}/artifact.html`, page);
   writeFileSync(`${out}/index.html`, doc(title, page.replace(/<title>.*<\/title>\n|<link rel="stylesheet"[^>]*>\n/g, "")));
   for (const [to, from] of Object.entries(FONTS)) cpSync(`node_modules/${from}`, `${out}/fonts/${to}`);
