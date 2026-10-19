@@ -1,0 +1,25 @@
+// ITCSS: van algemeen naar specifiek. Settings en tools geven zelf geen CSS
+// behalve de tokens op :root.
+@use "settings/tokens";
+@use "generic/fonts";
+@use "generic/reset";
+@use "elements/page";
+@use "elements/forms";
+@use "objects/wrap";
+@use "objects/split";
+@use "components/masthead";
+@use "components/hero";
+@use "components/button";
+@use "components/toolbar";
+@use "components/chapter";
+@use "components/card";
+@use "components/looks";
+@use "components/outfit";
+@use "components/dialog";
+@use "components/item";
+@use "components/questions";
+@use "components/maten";
+@use "components/table";
+@use "components/prose";
+@use "components/footer";
+@use "utilities/utilities";

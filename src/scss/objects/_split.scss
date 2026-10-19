@@ -1,0 +1,24 @@
+// Objects: asymmetrische spread. Smalle kolom links (blijft staan), brede kolom rechts.
+@use "../tools/mixins" as *;
+
+.o-split {
+  display: grid;
+  gap: 24px;
+  @include lg {
+    grid-template-columns: minmax(0, 3fr) minmax(0, 9fr);
+    gap: 48px;
+  }
+}
+.o-split__aside {
+  @include lg {
+    position: sticky;
+    top: 110px;
+    align-self: start;
+  }
+}
+.o-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(170px, 42vw), 1fr));
+  gap: 40px 20px;
+  align-items: start;
+}

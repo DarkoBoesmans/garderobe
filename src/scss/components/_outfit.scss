@@ -1,0 +1,25 @@
+// Outfit: een volledige look in één spread, met nummers zoals fotocredits.
+@use "../tools/mixins" as *;
+
+.c-outfit { display: grid; gap: 28px; padding: clamp(16px, 3vw, 40px); @include lg { grid-template-columns: minmax(0, 4fr) minmax(0, 8fr); } }
+.c-outfit__num { @include display(clamp(80px, 10vw, 140px)); color: var(--accent); font-style: italic; }
+.c-outfit__title { @include display(clamp(40px, 5vw, 72px)); line-height: .9; margin: 6px 0 14px; }
+.c-outfit__vibe { margin-top: 16px; color: var(--ink-2); max-width: 44ch; }
+.c-outfit__sum { border-top: 1px solid var(--ink); margin-top: 20px; padding-top: 12px; display: grid; gap: 6px; }
+.c-outfit__sum div { display: flex; justify-content: space-between; gap: 12px; }
+.c-outfit__sum dt { @include label; color: var(--ink-2); }
+.c-outfit__sum dd { font: 400 22px/1 var(--serif); }
+.c-outfit__nav { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 20px; }
+.c-outfit__grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+  align-items: start;
+  @include md { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+.c-outfit__piece:first-child { grid-column: span 2; grid-row: span 2; }
+.c-outfit__piece figcaption { display: grid; grid-template-columns: auto 1fr; gap: 2px 8px; margin-top: 8px; font-size: 13px; }
+.c-outfit__piece figcaption b { @include label; color: var(--accent); }
+.c-outfit__piece figcaption a { font: italic 400 18px/1.1 var(--serif); text-decoration: none; }
+.c-outfit__piece figcaption span { grid-column: 2; color: var(--ink-2); }
+.c-outfit__piece a { display: block; }

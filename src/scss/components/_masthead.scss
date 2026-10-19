@@ -1,0 +1,55 @@
+// Masthead: tijdschriftkop met nummer, seizoen en inhoudstafel.
+@use "../tools/mixins" as *;
+
+.c-masthead {
+  border-bottom: 1px solid var(--ink);
+  background: var(--paper);
+  position: sticky;
+  top: env(safe-area-inset-top, 0px);
+  z-index: 20;
+}
+.c-masthead__bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 8px 24px;
+  padding-block: 12px;
+}
+.c-masthead__issue {
+  @include label;
+  margin-right: auto;
+}
+.c-masthead__issue b { color: var(--accent); font-weight: 700; }
+.c-masthead__season { @include label; color: var(--ink-2); }
+.c-masthead__nav {
+  display: flex;
+  gap: 4px 22px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  width: 100%;
+  @include md { width: auto; order: 1; }
+}
+.c-masthead__link {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 6px;
+  min-height: 44px;
+  align-items: center;
+  font: 400 22px/1 var(--serif);
+  text-decoration: none;
+  white-space: nowrap;
+}
+.c-masthead__link small { @include label; color: var(--ink-2); }
+.c-masthead__link[aria-current="page"] { font-style: italic; color: var(--accent); }
+.c-masthead__link[aria-current="page"] small { color: var(--accent); }
+
+.c-skip {
+  position: absolute;
+  left: 8px;
+  top: -60px;
+  z-index: 50;
+  background: var(--ink);
+  color: var(--paper);
+  padding: 10px 14px;
+  &:focus { top: 8px; }
+}

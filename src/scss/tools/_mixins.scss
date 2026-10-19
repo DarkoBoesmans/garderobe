@@ -1,0 +1,22 @@
+// Tools: mixins zonder output.
+@use "../settings/tokens" as *;
+
+@mixin label {
+  font: 600 11px/1.2 var(--sans);
+  font-stretch: 112%;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+}
+
+@mixin display($size) {
+  font: 400 #{$size}/.82 var(--serif);
+  letter-spacing: -.025em;
+}
+
+@mixin md { @media (min-width: $bp-md) { @content; } }
+@mixin lg { @media (min-width: $bp-lg) { @content; } }
+
+@mixin focus-ring {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}

@@ -1,0 +1,9 @@
+// Tabelweergave van de kleerkast.
+@use "../tools/mixins" as *;
+
+.c-table-wrap { overflow-x: auto; }
+.c-table { width: 100%; border-collapse: collapse; min-width: 760px; }
+.c-table th { @include label; color: var(--ink-2); text-align: left; padding: 8px; border-bottom: 1px solid var(--ink); }
+.c-table td { padding: 8px; border-bottom: 1px solid var(--line); vertical-align: middle; }
+.c-table img { width: 48px; height: 60px; object-fit: cover; background: var(--paper-2); }
+.c-table button { background: none; border: 0; padding: 0; text-align: left; cursor: pointer; font: italic 400 18px var(--serif); min-height: 44px; }

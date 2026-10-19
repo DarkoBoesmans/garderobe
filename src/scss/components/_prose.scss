@@ -1,0 +1,10 @@
+// Lopende tekst voor de info- en privacypagina.
+@use "../tools/mixins" as *;
+
+.c-prose { padding-block: 40px 64px; }
+.c-prose section { padding-block: 22px; border-top: 1px solid var(--line); }
+.c-prose h2 { font: italic 400 32px/1.05 var(--serif); margin-bottom: 10px; }
+.c-prose p, .c-prose li { max-width: 68ch; margin-bottom: 8px; }
+.c-prose ul { list-style: square; padding-left: 20px; }
+.c-prose dl { display: grid; grid-template-columns: max-content 1fr; gap: 6px 18px; }
+.c-prose dt { @include label; color: var(--ink-2); padding-top: 3px; }

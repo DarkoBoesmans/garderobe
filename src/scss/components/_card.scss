@@ -1,0 +1,51 @@
+// Kaart in het lookbook en de kleerkast.
+@use "../tools/mixins" as *;
+
+.c-card { display: flex; flex-direction: column; gap: 10px; position: relative; min-width: 0; }
+.c-card__media {
+  display: block;
+  position: relative;
+  background: var(--paper-2);
+  overflow: hidden;
+}
+.c-card__img {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  background-repeat: no-repeat;
+  transition: transform .6s cubic-bezier(.2,.7,.2,1);
+}
+img.c-card__img { object-fit: cover; aspect-ratio: 4 / 5; }
+.c-card__media:hover .c-card__img { transform: scale(1.035); }
+.c-card__no { @include label; position: absolute; left: 8px; top: 8px; background: var(--paper); padding: 3px 6px; }
+.c-card__flag { @include label; position: absolute; right: 8px; top: 8px; background: var(--accent); color: var(--paper); padding: 3px 6px; }
+.c-card__head { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 2px 10px; align-items: baseline; }
+.c-card__shop { @include label; }
+.c-card__price { font: 500 13px var(--sans); font-variant-numeric: tabular-nums; white-space: nowrap; text-align: right; }
+.c-card__price small { display: block; color: var(--ink-2); font-size: 11px; }
+.c-card__title { font: italic 400 21px/1.1 var(--serif); }
+.c-card__title a { text-decoration: none; }
+.c-card__meta { font-size: 13px; color: var(--ink-2); }
+.c-card__meta b { color: var(--ink); font-weight: 600; }
+.c-card__meta a { color: var(--accent); }
+.c-card__actions { display: flex; gap: 14px; border-top: 1px solid var(--line); }
+// De kleerkastkaart is één grote knop.
+.c-card--button {
+  background: none;
+  border: 0;
+  padding: 0;
+  text-align: left;
+  cursor: pointer;
+  width: 100%;
+}
+.c-tag {
+  @include label;
+  display: inline-block;
+  padding: 3px 7px;
+  border: 1px solid currentColor;
+  text-decoration: none;
+  margin: 4px 6px 0 0;
+}
+.c-tag--accent { color: var(--accent); }
+.c-swatches { display: flex; flex-wrap: wrap; gap: 6px; font-size: 12px; color: var(--ink-2); }
+.c-swatch { width: 12px; height: 12px; border-radius: 50%; border: 1px solid var(--line); display: inline-block; vertical-align: -1px; margin-right: 4px; }

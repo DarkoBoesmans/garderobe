@@ -1,0 +1,45 @@
+// Knoppen: altijd tekst, nooit alleen een icoon.
+@use "../tools/mixins" as *;
+
+.c-btn {
+  @include label;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 0 18px;
+  border: 1px solid var(--ink);
+  background: var(--ink);
+  color: var(--paper);
+  cursor: pointer;
+  text-decoration: none;
+  &:hover { background: var(--accent); border-color: var(--accent); color: var(--paper); }
+  &:disabled { opacity: .45; cursor: not-allowed; }
+}
+.c-btn--ghost {
+  background: transparent;
+  color: var(--ink);
+  &:hover { background: transparent; color: var(--accent); }
+}
+.c-btn--danger {
+  background: transparent;
+  color: var(--accent);
+  border-color: var(--accent);
+  &:hover { background: var(--accent); color: var(--paper); }
+}
+.c-btn--small { min-height: 36px; padding: 0 12px; font-size: 10px; }
+.c-btn[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--paper); }
+.c-link-btn {
+  @include label;
+  background: none;
+  border: 0;
+  padding: 10px 0;
+  min-height: 44px;
+  cursor: pointer;
+  color: var(--ink-2);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  &:hover { color: var(--accent); }
+  &[aria-pressed="true"] { color: var(--accent); }
+}

@@ -1,0 +1,58 @@
+// Settings: design tokens. Eén bron voor kleur, type en ritme.
+// Contrast (WCAG): scripts/check.ts leest deze waarden en faalt onder 4.5:1.
+
+$paper: #F6F6F3;
+$paper-2: #E9E9E4;
+$ink: #0D0D0C;
+$ink-2: #4A4A46;
+$line: #CDCDC6;
+
+$paper-dark: #0E0E0D;
+$paper-2-dark: #1A1A18;
+$ink-dark: #EDEDE8;
+$ink-2-dark: #A6A69F;
+$line-dark: #3A3A36;
+
+$accent-darko: #4B5A12;
+$accent-darko-dark: #C3D27A;
+$accent-lana: #7A2E3A;
+$accent-lana-dark: #E8A2AB;
+
+$bp-md: 760px;
+$bp-lg: 1100px;
+
+:root {
+  --paper: #{$paper};
+  --paper-2: #{$paper-2};
+  --ink: #{$ink};
+  --ink-2: #{$ink-2};
+  --line: #{$line};
+  --serif: "Instrument Serif", "Iowan Old Style", Georgia, serif;
+  --sans: "Archivo Variable", "Helvetica Neue", Arial, sans-serif;
+  --gutter: clamp(16px, 3vw, 40px);
+  --max: 1440px;
+  color-scheme: light;
+}
+
+@mixin dark-tokens {
+  --paper: #{$paper-dark};
+  --paper-2: #{$paper-2-dark};
+  --ink: #{$ink-dark};
+  --ink-2: #{$ink-2-dark};
+  --line: #{$line-dark};
+  color-scheme: dark;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) { @include dark-tokens; }
+}
+:root[data-theme="dark"] { @include dark-tokens; }
+
+// Eén accentkleur per persoon, licht en donker.
+[data-person="darko"] { --accent-l: #{$accent-darko}; --accent-d: #{$accent-darko-dark}; }
+[data-person="lana"] { --accent-l: #{$accent-lana}; --accent-d: #{$accent-lana-dark}; }
+body { --accent: var(--accent-l); }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) body { --accent: var(--accent-d); }
+}
+:root[data-theme="dark"] body { --accent: var(--accent-d); }

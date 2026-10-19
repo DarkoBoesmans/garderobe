@@ -1,0 +1,18 @@
+// Maten: meetformulier en advies naast elkaar.
+@use "../tools/mixins" as *;
+
+.c-maten { display: grid; gap: 40px; padding-block: 40px 64px; @include lg { grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); } }
+.c-maten__group { border-top: 1px solid var(--ink); padding-top: 10px; margin-bottom: 28px; }
+.c-maten__legend { font: italic 400 30px var(--serif); margin-bottom: 6px; }
+.c-maten__row { display: grid; gap: 4px 16px; padding-block: 10px; border-bottom: 1px solid var(--line); @include md { grid-template-columns: 170px 140px minmax(0, 1fr); align-items: center; } }
+.c-maten__label { font-weight: 600; }
+.c-maten__input { display: flex; align-items: center; gap: 6px; }
+.c-maten__input input { width: 96px; text-align: right; font-variant-numeric: tabular-nums; }
+.c-maten__unit { @include label; color: var(--ink-2); }
+.c-maten__hint { font-size: 13px; color: var(--ink-2); }
+.c-advice { @include lg { position: sticky; top: 110px; align-self: start; } }
+.c-advice__title { @include display(48px); margin-bottom: 12px; }
+.c-advice__row { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 4px 16px; padding-block: 12px; border-top: 1px solid var(--line); }
+.c-advice__what { font-weight: 600; }
+.c-advice__size { font: 400 34px/1 var(--serif); color: var(--accent); white-space: nowrap; text-align: right; }
+.c-advice__why { grid-column: 1 / -1; font-size: 13px; color: var(--ink-2); }

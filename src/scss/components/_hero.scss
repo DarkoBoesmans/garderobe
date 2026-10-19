@@ -1,0 +1,29 @@
+// Hero: enorme schreefkop met smalle tekstkolom ernaast.
+@use "../tools/mixins" as *;
+
+.c-hero {
+  display: grid;
+  gap: 24px;
+  padding-block: clamp(32px, 6vw, 72px) 32px;
+  border-bottom: 1px solid var(--ink);
+  @include lg { grid-template-columns: minmax(0, 8fr) minmax(0, 4fr); align-items: end; gap: 48px; }
+}
+.c-hero__title {
+  @include display(clamp(84px, 17vw, 248px));
+  margin-left: -.04em;
+}
+.c-hero__title em { color: var(--accent); }
+.c-hero__kicker { @include label; color: var(--ink-2); margin-bottom: 18px; }
+.c-hero__theme { font: italic 400 clamp(24px, 2.4vw, 32px)/1.1 var(--serif); margin-bottom: 14px; }
+.c-hero__dek { color: var(--ink-2); max-width: 46ch; }
+.c-hero__dek code { font: 500 13px var(--sans); color: var(--ink); background: var(--paper-2); padding: 1px 5px; word-break: break-all; }
+.c-hero__facts {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
+  gap: 12px;
+  margin-top: 24px;
+  border-top: 1px solid var(--line);
+  padding-top: 14px;
+}
+.c-hero__fact { @include label; color: var(--ink-2); }
+.c-hero__fact b { display: block; font: 400 40px/1 var(--serif); letter-spacing: 0; text-transform: none; color: var(--ink); margin-bottom: 4px; }

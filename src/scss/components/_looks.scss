@@ -1,0 +1,22 @@
+// De looks (stijlrichtingen): rijen als inhoudstafel van een modereeks.
+@use "../tools/mixins" as *;
+
+.c-looks { padding-block: 56px 24px; border-bottom: 1px solid var(--ink); }
+.c-looks__head { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; margin-bottom: 18px; }
+.c-looks__title { @include display(clamp(48px, 7vw, 96px)); }
+.c-looks__title em { color: var(--accent); }
+.c-look {
+  display: grid;
+  gap: 12px 24px;
+  padding-block: 22px;
+  border-top: 1px solid var(--line);
+  @include lg { grid-template-columns: 80px minmax(0, 4fr) minmax(0, 5fr) auto; align-items: center; }
+}
+.c-look__num { @include display(64px); color: var(--accent); font-style: italic; }
+.c-look__name { font: italic 400 clamp(30px, 3vw, 42px)/1 var(--serif); }
+.c-look__when { @include label; color: var(--ink-2); margin-top: 8px; }
+.c-look__pal { display: flex; height: 6px; margin-top: 12px; max-width: 220px; }
+.c-look__pal span { flex: 1; }
+.c-look__strip { border: 0; padding: 0; background: none; cursor: pointer; display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; }
+.c-look__thumb { aspect-ratio: 3 / 4; background: var(--paper-2); overflow: hidden; }
+.c-look__have { @include label; color: var(--ink-2); margin-top: 6px; }

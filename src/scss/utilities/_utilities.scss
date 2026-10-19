@@ -1,0 +1,9 @@
+// Utilities: enkelvoudige overrides, mogen !important.
+.u-sr-only {
+  position: absolute !important;
+  width: 1px; height: 1px;
+  overflow: hidden; clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+.u-accent { color: var(--accent) !important; }
+.u-muted { color: var(--ink-2) !important; }

@@ -1,0 +1,7 @@
+// Objects: layoutpatronen zonder cosmetica.
+.o-wrap {
+  max-width: var(--max);
+  margin-inline: auto;
+  padding-left: max(var(--gutter), env(safe-area-inset-left, 0px));
+  padding-right: max(var(--gutter), env(safe-area-inset-right, 0px));
+}

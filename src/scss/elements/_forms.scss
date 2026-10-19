@@ -1,0 +1,19 @@
+// Elements: formulieren. Grote raakvlakken (44px) en zichtbare focus.
+@use "../tools/mixins" as *;
+
+input, select, textarea {
+  min-height: 44px;
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid var(--ink);
+  border-radius: 0;
+  padding: 8px 2px;
+  font-size: 16px;
+}
+textarea { border: 1px solid var(--ink); padding: 8px; }
+select { padding-right: 24px; }
+input::placeholder, textarea::placeholder { color: var(--ink-2); opacity: 1; }
+input:focus-visible, select:focus-visible, textarea:focus-visible { outline-offset: 0; }
+label { cursor: pointer; }
+fieldset { border: 0; padding: 0; min-width: 0; }
+legend { padding: 0; }

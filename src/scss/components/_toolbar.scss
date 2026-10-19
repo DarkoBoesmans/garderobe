@@ -1,0 +1,24 @@
+// Toolbar: filters onder de masthead.
+@use "../tools/mixins" as *;
+
+.c-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  gap: 12px 24px;
+  padding-block: 16px;
+  border-bottom: 1px solid var(--line);
+}
+.c-toolbar__field { display: grid; gap: 2px; flex: 0 1 auto; }
+.c-toolbar__field--grow { flex: 1 1 220px; }
+.c-toolbar__field span { @include label; color: var(--ink-2); }
+.c-toolbar__count { @include label; color: var(--ink-2); margin-left: auto; padding-bottom: 12px; }
+.c-toolbar__seg { display: flex; flex-wrap: wrap; gap: 0 16px; }
+.c-toc {
+  display: flex;
+  gap: 4px 20px;
+  flex-wrap: wrap;
+  padding-block: 10px 0;
+}
+.c-toc a { @include label; text-decoration: none; display: inline-flex; min-height: 36px; align-items: center; gap: 6px; }
+.c-toc a span { font: italic 400 16px var(--serif); letter-spacing: 0; text-transform: none; color: var(--accent); }
