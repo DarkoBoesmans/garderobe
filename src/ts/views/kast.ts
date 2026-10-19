@@ -43,7 +43,7 @@ export const kast: View = {
 <section class="c-hero">
   <div><p class="c-hero__kicker">Wat je hebt · <span id="klast">${esc(S.person.issue)}</span></p><h1 class="c-hero__title">Kleer<em>kast.</em></h1></div>
   <div><p class="c-hero__theme">Stuk per stuk.</p>
-    <p class="c-hero__dek">Zet foto's (ook .heic) in <code>${esc(S.person.folder)}</code>. Elke avond om 19:45 kijkt Claude de map na, voegt nieuwe stukken toe en zet hieronder een vraag klaar als iets niet op de foto te zien is.</p>
+    <p class="c-hero__dek">${S.unlocked ? `Momentopname van de kleerkast van ${esc(S.person.name)}. Alleen lezen; aanpassen kan in de privéversie op Claude.` : "Alles wat je hebt, stuk per stuk. Klik een stuk aan om de velden aan te vullen of het te verwijderen."}</p>
     <div class="c-hero__facts" id="kfacts"></div></div>
 </section>
 <div id="kq"></div>
@@ -76,9 +76,9 @@ export const kast: View = {
     const L = filtered();
     $("kcount").textContent = `${L.length} van ${S.items.length} stuks`;
     const book = $("kbook");
-    if (!S.db && S.loaded) { book.innerHTML = `<p class="c-empty">De kleerkast laadt alleen als je ingelogd bent in Claude.</p>`; return; }
+    if (!S.db && !S.unlocked && S.loaded) { book.innerHTML = `<p class="c-empty">De kleerkast laadt alleen als je ingelogd bent in Claude.</p>`; return; }
     if (!S.loaded) { book.innerHTML = `<p class="c-empty">Kleerkast laden…</p>`; return; }
-    if (!S.items.length) { book.innerHTML = `<p class="c-empty">Je kleerkast is nog leeg. Zet foto's in de map; na de volgende avondscan staan ze hier.</p>`; return; }
+    if (!S.items.length) { book.innerHTML = `<p class="c-empty">De kleerkast is nog leeg.</p>`; return; }
     if (!L.length) { book.innerHTML = `<p class="c-empty">Geen stukken voor deze filters.</p>`; return; }
     book.innerHTML = [...new Set(L.map((i) => i.category || "Overig"))].map((c, ci) => {
       const g = L.filter((i) => (i.category || "Overig") === c);

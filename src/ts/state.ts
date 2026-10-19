@@ -14,6 +14,8 @@ export const S = {
   downloads: null as typeof Claude.downloads | null,
   canWrite: true,
   /** false op GitHub Pages: daar is geen Claude-database, dus enkel het lookbook. */
+  /** true op GitHub Pages nadat het wachtwoord de kleerkast heeft ontsleuteld (alleen lezen). */
+  unlocked: false,
   online: typeof window !== "undefined" && !!window.claude,
   /** false tot de database antwoordt; dan tonen we "laden" in plaats van "leeg". */
   loaded: false,

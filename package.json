@@ -4,7 +4,8 @@
   "description": "Lookbook, kleerkast en maten voor Darko en Lana",
   "scripts": {
     "build": "node scripts/build.ts",
-    "check": "tsc && node scripts/check.ts"
+    "check": "tsc && node scripts/check.ts",
+    "encrypt": "node scripts/encrypt.ts"
   },
   "author": "",
   "license": "UNLICENSED",

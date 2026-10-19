@@ -59,8 +59,7 @@ export async function answer(q: Question, val: string | null) {
 
 const blobId = (url: string) => url.match(/\/_blob\/([0-9a-f]{32})/)?.[1];
 
-/** Verwijdert een stuk, zijn vragen en zijn foto's. De avondscan voegt het niet opnieuw toe:
- * de bestandsnamen blijven in meta/state als verwerkt staan. */
+/** Verwijdert een stuk, zijn vragen en zijn foto's. */
 export async function deleteItem(it: Item) {
   const db = S.db!;
   for (const q of S.qs.filter((q) => q.itemId === it.id)) await db.doc("questions/" + q.id).delete();

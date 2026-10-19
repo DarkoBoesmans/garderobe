@@ -3,6 +3,7 @@
 // - dist/ als geheel: de openbare GitHub Pages-site (index.html per persoon en een voorpagina)
 import { build } from "esbuild";
 import { compile } from "sass";
+import { landing } from "./landing.ts";
 import { cpSync, mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 
 // Titels blijven gelijk aan de bestaande artifacts.
@@ -32,6 +33,7 @@ for (const [key, title] of Object.entries(PEOPLE)) {
   writeFileSync(`${out}/index.html`, doc(title, page.replace(/<title>.*<\/title>\n|<link rel="stylesheet"[^>]*>\n/g, "")));
   for (const [to, from] of Object.entries(FONTS)) cpSync(`node_modules/${from}`, `${out}/fonts/${to}`);
   cpSync(`sheets/${key}`, `${out}/sheets`, { recursive: true });
+  cpSync(`vault/${key}.bin`, `${out}/vault.bin`); // versleuteld; enkel voor GitHub Pages
   console.log("gebouwd:", out);
 }
 
@@ -40,12 +42,12 @@ writeFileSync("dist/app.css", css);
 cpSync("dist/darko/fonts", "dist/fonts", { recursive: true });
 writeFileSync("dist/.nojekyll", "");
 writeFileSync("dist/index.html", doc("Garderobe", `
-<main class="o-wrap">
-<section class="c-hero">
-  <div><p class="c-hero__kicker">Herfst / Winter 2026</p><h1 class="c-hero__title">Garde<em>robe.</em></h1></div>
-  <div><p class="c-hero__theme">Twee lookbooks.</p>
-  <p class="c-hero__dek">Inspiratie voor het seizoen, per persoon. Niet commercieel; productfoto's zijn van de winkels en linken naar de bron.</p>
-  <p class="c-hero__dek"><a class="c-btn" href="lana/">Lana</a> <a class="c-btn c-btn--ghost" href="darko/">Darko</a></p></div>
-</section>
-</main>`).replace("<body>", `<body data-person="lana">`));
+<main class="c-stand">
+  <header class="c-stand__head o-wrap">
+    <h1 class="c-stand__title">Garde<em>robe.</em></h1>
+    <p class="c-stand__dek">Twee lookbooks voor herfst en winter 2026. Kies een cover.</p>
+  </header>
+  <div class="c-stand__covers o-wrap">${landing()}</div>
+  <p class="c-stand__foot o-wrap">Niet commercieel. Productfoto's zijn van de winkels en linken naar de bron. <a href="lana/#info">Privacy en colofon</a></p>
+</main>`));
 console.log("gebouwd: dist (GitHub Pages)");

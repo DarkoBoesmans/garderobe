@@ -69,7 +69,7 @@ export const lookbook: View = {
     if (!document.getElementById("lbook")) return;
     const L = filtered(), all = S.look.items;
     const busy = st.q || st.shop || st.ch || st.f !== "all";
-    $("lfacts").innerHTML = [[all.length, "stuks"], [new Set(all.map((x) => x.s)).size, "winkels"], [S.look.dirs.length, "looks"], ...(S.online ? [[all.filter(haveOf).length, "heb je al"]] : [])]
+    $("lfacts").innerHTML = [[all.length, "stuks"], [new Set(all.map((x) => x.s)).size, "winkels"], [S.look.dirs.length, "looks"], ...(S.online || S.unlocked ? [[all.filter(haveOf).length, "heb je al"]] : [])]
       .map(([n, l]) => `<span class="c-hero__fact"><b>${n}</b>${l}</span>`).join("");
     const looks = $("looks");
     looks.hidden = !!busy;

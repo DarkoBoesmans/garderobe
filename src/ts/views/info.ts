@@ -28,8 +28,8 @@ export const info: View = {
     <p>Niet bewaard: naam, e-mailadres, adres, betaalgegevens, locatie, gegevens van kinderen. Er zijn geen formulieren die zulke gegevens vragen en er worden geen e-mails of nieuwsbrieven verstuurd.</p></section>
 
   <section aria-labelledby="i3"><h2 id="i3">Waar en wie het ziet</h2>
-    <p>De gegevens staan in de database van deze pagina op claude.ai. Alleen mensen met wie de pagina gedeeld is kunnen ze zien. Elke avond om 19:45 leest Claude de fotomap, voegt nieuwe stukken toe en stelt vragen; Claude leest ook je maten om maatadvies te geven. </p>
-    <p>Daarnaast staat er een openbare versie op GitHub Pages. Die bevat alleen het lookbook: geen kleerkast, geen maten, geen eigen foto's en geen database. GitHub houdt als host technische gegevens bij, zoals IP-adressen in serverlogs.</p></section>
+    <p>De gegevens staan in de database van deze pagina op claude.ai. Alleen mensen met wie de pagina gedeeld is kunnen ze zien. Er draait geen automatische scan meer: stukken komen er enkel bij als Darko of Claude ze toevoegt. </p>
+    <p>Daarnaast staat er een openbare versie op GitHub Pages. Het lookbook is daar openbaar. De kleerkast en de maten staan er alleen versleuteld (AES-256, sleutel afgeleid van een wachtwoord dat niet op GitHub staat) en zijn enkel leesbaar na het intikken van dat wachtwoord. GitHub houdt als host technische gegevens bij, zoals IP-adressen in serverlogs.</p></section>
 
   <section aria-labelledby="i4"><h2 id="i4">Cookies en tracking</h2>
     <p>Deze pagina zet zelf geen cookies, gebruikt geen lokale opslag en heeft geen analytics, pixels, embeds of advertentiecode. Lettertypes en productfoto's worden mee geleverd met de pagina, dus bij het openen gaat er geen verzoek naar Google, Pinterest of een winkel. Ook GitHub Pages zet geen cookies. Een cookiebanner is daarom niet nodig. Claude.ai gebruikt zelf strikt noodzakelijke cookies om je ingelogd te houden; die vallen onder het beleid van Anthropic.</p></section>
@@ -42,7 +42,7 @@ export const info: View = {
     <p>Productfoto's en -namen zijn van de winkels en merken; ze staan hier als niet-commerciële inspiratie met een link naar de bron. Wil een winkel of merk een foto weg, dan kan dat via een issue op de GitHub-repository DarkoBoesmans/garderobe en gaat ze eruit. Lettertypes: Instrument Serif en Archivo, beide onder de SIL Open Font License. Je eigen kledingfoto's zijn van jou.</p></section>
 
   <section aria-labelledby="i7"><h2 id="i7">Jouw gegevens: inzien en wissen</h2>
-    <p>Een stuk verwijder je via de knop "Verwijder stuk" in de detailweergave. Hier kun je alles in één keer downloaden of wissen. Wissen haalt stukken, vragen, maten, favorieten en foto's weg; de foto's in de map op de pc blijven staan. Wil je dat de avondscan stopt, haal dan de foto's uit de map of vraag Darko de geplande taak te stoppen.</p>
+    <p>Een stuk verwijder je via de knop "Verwijder stuk" in de detailweergave. Hier kun je alles in één keer downloaden of wissen. Wissen haalt stukken, vragen, maten, favorieten en foto's weg; de foto's in de map op de pc blijven staan.</p>
     <div class="c-actions c-actions--start" id="iacts">
       ${S.downloads ? `<button type="button" class="c-btn c-btn--ghost" data-export>Download mijn gegevens (JSON)</button>` : ""}
       ${w ? `<button type="button" class="c-btn c-btn--danger" data-wipe>Wis alle gegevens</button>` : ""}

@@ -76,7 +76,7 @@ document.addEventListener("click", async (e) => {
   if (t.closest("[data-del]")) {
     const it = S.items.find((i) => i.id === f.dataset.edit)!;
     document.getElementById("acts")!.innerHTML = `<div class="c-confirm" role="alertdialog" aria-labelledby="cq">
-  <p id="cq">"${esc(it.name || it.brand || "Dit stuk")}" en de foto's ervan definitief verwijderen? De avondscan voegt het niet opnieuw toe.</p>
+  <p id="cq">"${esc(it.name || it.brand || "Dit stuk")}" en de foto's ervan definitief verwijderen?</p>
   <button type="button" class="c-btn c-btn--ghost" data-keep>Nee, houden</button>
   <button type="button" class="c-btn c-btn--danger" data-del-yes>Ja, verwijder</button>
   <span class="c-actions__status" role="status" id="dstat"></span></div>`;

@@ -1,0 +1,65 @@
+// Voorpagina: twee covers als tijdschriften op een toonbank. Licht scheef, rechtgetrokken bij hover of focus.
+@use "../tools/mixins" as *;
+
+.c-stand > * { width: 100%; max-width: 960px; }
+.c-stand { min-height: 100dvh; display: grid; align-content: center; gap: clamp(24px, 4vw, 48px); padding-block: clamp(32px, 6vw, 72px); }
+.c-stand__head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: end; gap: 12px 32px; }
+.c-stand__title { @include display(clamp(64px, 12vw, 168px)); margin-left: -.04em; }
+.c-stand__title em { color: var(--accent); }
+.c-stand__dek { font: italic 400 clamp(20px, 2vw, 26px)/1.2 var(--serif); max-width: 22ch; }
+.c-stand__covers {
+  display: grid;
+  gap: clamp(28px, 5vw, 72px);
+  @include md { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+.c-stand__foot { font-size: 13px; color: var(--ink-2); }
+
+.c-cover {
+  position: relative;
+  display: grid;
+  aspect-ratio: 3 / 4;
+  max-width: 100%;
+  overflow: hidden;
+  background: var(--paper-2);
+  color: var(--ink);
+  text-decoration: none;
+  box-shadow: 0 1px 0 var(--line), 0 18px 40px -24px color-mix(in srgb, var(--ink) 55%, transparent);
+  transform: rotate(var(--tilt, -1.6deg));
+  transition: transform .5s cubic-bezier(.2, .7, .2, 1), box-shadow .5s;
+  &:nth-child(2) { --tilt: 1.2deg; }
+  &:hover, &:focus-visible {
+    transform: rotate(0) translateY(-10px);
+    box-shadow: 0 1px 0 var(--line), 0 30px 60px -28px color-mix(in srgb, var(--ink) 70%, transparent);
+    color: var(--ink);
+  }
+  &:focus-visible { outline-offset: 6px; }
+}
+.c-cover > * { grid-area: 1 / 1; }
+.c-cover__hero { width: 100%; height: 100%; background-repeat: no-repeat; aspect-ratio: auto !important; }
+.c-cover__mast {
+  @include label;
+  align-self: start;
+  display: flex;
+  justify-content: space-between;
+  padding: 14px 16px;
+  background: var(--paper);
+  z-index: 1;
+}
+.c-cover__mast span:last-child { color: var(--accent); }
+.c-cover__inset { align-self: center; justify-self: end; display: grid; gap: 8px; width: 26%; margin-right: 14px; z-index: 1; }
+.c-cover__thumb { display: block; width: 100%; background-repeat: no-repeat; border: 4px solid var(--paper); }
+.c-cover__lines { align-self: end; display: grid; gap: 4px; padding: 18px 16px 56px; background: linear-gradient(to top, var(--paper) 62%, transparent); z-index: 1; }
+.c-cover__name { @include display(clamp(64px, 9vw, 132px)); }
+.c-cover__name em { color: var(--accent); font-style: normal; }
+.c-cover__theme { font: italic 400 clamp(20px, 1.8vw, 26px)/1.1 var(--serif); }
+.c-cover__facts { @include label; color: var(--ink-2); }
+.c-cover__cta {
+  @include label;
+  align-self: end;
+  justify-self: stretch;
+  padding: 12px 16px;
+  background: var(--ink);
+  color: var(--paper);
+  z-index: 2;
+}
+.c-cover:hover .c-cover__cta, .c-cover:focus-visible .c-cover__cta { background: var(--accent); }

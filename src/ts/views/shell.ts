@@ -38,7 +38,7 @@ export function startShell(app: HTMLElement) {
 
 function go(moveFocus: boolean) {
   const hash = location.hash in ROUTES ? location.hash : "#lookbook";
-  current = !S.online && (hash === "#kast" || hash === "#maten") ? offline(hash) : ROUTES[hash]!;
+  current = !S.online && !S.unlocked && (hash === "#kast" || hash === "#maten") ? offline(hash) : ROUTES[hash]!;
   document.querySelectorAll(".c-masthead__link").forEach((a) => a.toggleAttribute("aria-current", a.getAttribute("href") === hash));
   document.querySelectorAll(".c-masthead__link[aria-current]").forEach((a) => a.setAttribute("aria-current", "page"));
   document.title = `${current.title} · ${S.person.name}`;

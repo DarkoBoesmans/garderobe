@@ -1,4 +1,4 @@
-// Vragen van de avondscan: één tik op een suggestie of zelf typen.
+// Open vragen over stukken: één tik op een suggestie of zelf typen.
 import { S, render } from "../state";
 import { answer, why } from "../store";
 import type { Item, Question } from "../types";

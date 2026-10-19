@@ -1,0 +1,8 @@
+// Wachtwoordformulier voor de versleutelde kleerkast op GitHub Pages.
+@use "../tools/mixins" as *;
+
+.c-lock { display: grid; gap: 8px; margin-top: 20px; max-width: 420px; }
+.c-lock__label { @include label; color: var(--ink-2); }
+.c-lock__row { display: flex; flex-wrap: wrap; gap: 10px; align-items: end; }
+.c-lock__row input { flex: 1 1 200px; min-width: 0; }
+.c-lock__msg { font-size: 13px; color: var(--accent); min-height: 1.5em; }
