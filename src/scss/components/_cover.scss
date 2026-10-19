@@ -63,3 +63,5 @@
   z-index: 2;
 }
 .c-cover:hover .c-cover__cta, .c-cover:focus-visible .c-cover__cta { background: var(--accent); }
+.c-stand__foot a { display: inline-block; padding-block: 6px; }
+.c-stand__foot a:hover { color: var(--accent); }

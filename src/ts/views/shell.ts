@@ -18,7 +18,7 @@ export function startShell(app: HTMLElement) {
   document.documentElement.lang = "nl";
   document.body.dataset.person = p.key;
   app.innerHTML = `
-<button type="button" class="c-skip" data-skip>Naar de inhoud</button>
+<a class="c-skip" href="#view" data-skip>Naar de inhoud</a>
 <header class="c-masthead"><div class="o-wrap c-masthead__bar">
   <span class="c-masthead__issue"><b>${esc(p.issue)}</b> De garderobe van ${esc(p.name)}</span>
   <nav class="c-masthead__nav" aria-label="Onderdelen">${NAV.map(([h, l], i) => `<a class="c-masthead__link" href="${h}"><small>0${i + 1}</small>${l}</a>`).join("")}</nav>
@@ -31,7 +31,7 @@ export function startShell(app: HTMLElement) {
 </footer>
 <dialog id="dlg" class="c-dialog"></dialog>`;
   window.addEventListener("hashchange", () => go(true));
-  app.querySelector("[data-skip]")!.addEventListener("click", () => document.getElementById("view")!.focus());
+  app.querySelector("[data-skip]")!.addEventListener("click", (e) => { e.preventDefault(); document.getElementById("view")!.focus(); });
   onRender(() => current.update());
   go(false);
 }

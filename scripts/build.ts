@@ -19,7 +19,7 @@ const doc = (title: string, body: string, base = "") => `<!doctype html>
 <html lang="nl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="robots" content="noindex"><title>${title}</title><meta name="description" content="${DESC}">
 <meta property="og:title" content="${title}"><meta property="og:description" content="${DESC}"><meta name="twitter:card" content="summary">
-<link rel="icon" href="${ICON}"><link rel="stylesheet" href="${base}app.css"></head>
+<link rel="icon" href="${ICON}"><link rel="preload" href="${base}fonts/instrument-serif-400.woff2" as="font" type="font/woff2" crossorigin><link rel="stylesheet" href="${base}app.css"></head>
 <body>${body}</body></html>
 `;
 
@@ -54,4 +54,12 @@ writeFileSync("dist/index.html", doc("Garderobe", `
   <div class="c-stand__covers o-wrap">${landing()}</div>
   <p class="c-stand__foot o-wrap">Niet commercieel. Productfoto's zijn van de winkels en linken naar de bron. <a href="lana/#info">Privacy en colofon</a></p>
 </main>`));
+writeFileSync("dist/404.html", doc("Niet gevonden · Garderobe", `
+<main class="c-stand" data-person="lana">
+  <header class="c-stand__head o-wrap">
+    <h1 class="c-stand__title">Niet in de <em>kast.</em></h1>
+    <p class="c-stand__dek">Deze pagina bestaat niet. Kies een van de twee lookbooks.</p>
+  </header>
+  <p class="o-wrap"><a class="c-btn" href="/garderobe/lana/">Lana</a> <a class="c-btn c-btn--ghost" href="/garderobe/darko/">Darko</a></p>
+</main>`, "/garderobe/").replace("<body>", `<body data-person="lana">`));
 console.log("gebouwd: dist (GitHub Pages)");

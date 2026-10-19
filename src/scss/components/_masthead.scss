@@ -13,21 +13,23 @@
   flex-wrap: wrap;
   align-items: baseline;
   gap: 8px 24px;
-  padding-block: 12px;
+  padding-block: 6px;
+  @include md { padding-block: 12px; }
 }
 .c-masthead__issue {
   @include label;
   margin-right: auto;
 }
 .c-masthead__issue b { color: var(--accent); font-weight: 700; }
-.c-masthead__season { @include label; color: var(--ink-2); }
+.c-masthead__season { @include label; color: var(--ink-2); display: none; @include md { display: block; } }
 .c-masthead__nav {
   display: flex;
   gap: 4px 22px;
   overflow-x: auto;
   scrollbar-width: none;
   width: 100%;
-  @include md { width: auto; order: 1; }
+  mask-image: linear-gradient(to right, #000 85%, transparent);
+  @include md { width: auto; order: 1; mask-image: none; }
 }
 .c-masthead__link {
   display: inline-flex;
@@ -40,6 +42,8 @@
   white-space: nowrap;
 }
 .c-masthead__link small { @include label; color: var(--ink-2); }
+.c-masthead__link { background: linear-gradient(var(--accent), var(--accent)) 0 100% / 0 1px no-repeat; transition: background-size .3s; }
+.c-masthead__link:hover { background-size: 100% 1px; }
 .c-masthead__link[aria-current="page"] { font-style: italic; color: var(--accent); }
 .c-masthead__link[aria-current="page"] small { color: var(--accent); }
 

@@ -7,3 +7,4 @@
 .c-chapter__note { color: var(--ink-2); max-width: 36ch; }
 .c-chapter__count { @include label; color: var(--ink-2); margin-top: 14px; }
 .c-empty { font: italic 400 28px/1.2 var(--serif); color: var(--ink-2); padding-block: 48px; max-width: 30ch; }
+.c-chapter__more { margin-top: 28px; }

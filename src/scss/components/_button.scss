@@ -40,6 +40,6 @@
   color: var(--ink-2);
   text-decoration: underline;
   text-underline-offset: 4px;
-  &:hover { color: var(--accent); }
+  &:hover { color: var(--accent); text-decoration-thickness: 2px; }
   &[aria-pressed="true"] { color: var(--accent); }
 }

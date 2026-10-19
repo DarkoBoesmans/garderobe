@@ -7,6 +7,8 @@ import { ROMAN, esc, two } from "../util";
 import { looksHtml } from "./looks";
 import type { View } from "./shell";
 
+const open = new Set<string>(); // hoofdstukken die volledig getoond worden
+const FIRST = 10; // ponytail: vaste kop per hoofdstuk, paginering als 10 te weinig blijkt
 const st = { q: "", shop: "", sort: "", ch: "", f: "all" as "all" | "fav" | "pin" | "hidden" };
 const $ = (id: string) => document.getElementById(id)!;
 
@@ -90,7 +92,8 @@ export const lookbook: View = {
       if (!g.length) return "";
       return `<section class="c-chapter o-split" aria-labelledby="ch-${ci}">
   <div class="o-split__aside"><div class="c-chapter__num" aria-hidden="true">${ROMAN[ci]}</div><h2 class="c-chapter__title" id="ch-${ci}">${esc(c)}</h2><p class="c-chapter__note">${esc(note)}</p><p class="c-chapter__count">${g.length} stuks</p></div>
-  <div class="o-grid">${g.map((x, i) => card(x, i + 1)).join("")}</div>
+  <div><div class="o-grid">${(open.has(c) || st.ch === c ? g : g.slice(0, FIRST)).map((x, i) => card(x, i + 1)).join("")}</div>
+  ${g.length > FIRST && !open.has(c) && st.ch !== c ? `<button type="button" class="c-btn c-btn--ghost c-chapter__more" data-more="${esc(c)}">Toon alle ${g.length} stuks</button>` : ""}</div>
 </section>`;
     }).join("");
     $("lbook").innerHTML = html || `<p class="c-empty">${st.f === "fav" ? "Nog geen favorieten. Kies Bewaar bij een stuk." : st.f === "hidden" ? "Niets verwijderd." : "Niets gevonden. Wis de zoekterm of kies een andere winkel."}</p>`;
@@ -101,6 +104,8 @@ document.addEventListener("click", (e) => {
   const t = e.target as HTMLElement;
   const f = t.closest<HTMLElement>("[data-lf]");
   if (f) { st.f = f.dataset.lf as typeof st.f; lookbook.update(); return; }
+  const m = t.closest<HTMLElement>("[data-more]");
+  if (m) { open.add(m.dataset.more!); lookbook.update(); return; }
   const c = t.closest<HTMLElement>("[data-lch]");
   if (c) { st.ch = c.dataset.lch!; lookbook.update(); return; }
   const fav = t.closest<HTMLElement>("[data-fav]");
