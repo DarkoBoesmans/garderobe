@@ -11,6 +11,7 @@ export const darko: Person = {
   theme: "Warme heritage casual",
   dek: "Tabak, olijf, camel en ecru. Wijde broeken, truien met textuur en één opvallende laag, afgewerkt met een sneaker die het verhaal draagt.",
   folder: "C:\\Users\\Darko\\Pictures\\Wardrobe",
+  privateUrl: "https://claude.ai/artifact/1vk5ryCxbyHDrX5Wff7C4w",
   categories: ["Jassen", "Truien & cardigans", "Hemden & overshirts", "T-shirts & polo's", "Sweaters & hoodies", "Broeken", "Jeans", "Shorts", "Schoenen", "Sneakers", "Accessoires", "Sport & outdoor", "Overig"],
   chapterMap: {
     "Jassen": { cats: ["Jassen"], kind: "jas" },
@@ -31,8 +32,9 @@ export const lana: Person = {
   issue: "N° 02",
   season: "Herfst / Winter 2026",
   theme: "Dark academia voor kantoor",
-  dek: "Chocolade, bordeaux, bosgroen en crème. Lange jassen, midirokken en truien met textuur: verzorgd genoeg voor een werkdag als preventieadviseur.",
+  dek: "Chocolade, bordeaux, bosgroen en crème. Lange jassen, midirokken en truien met textuur: verzorgd genoeg voor kantoor en plaatsbezoeken.",
   folder: "C:\\Users\\Darko\\Pictures\\Wardrobe Lana",
+  privateUrl: "https://claude.ai/artifact/6TuPFXBQYBbVR3dGMyKXUw",
   categories: ["Jassen & blazers", "Truien & cardigans", "Blouses & hemden", "T-shirts & tops", "Broeken", "Jeans", "Rokken", "Jurken", "Schoenen", "Sneakers", "Tassen", "Accessoires", "Sport & outdoor", "Overig"],
   chapterMap: {
     "Jassen & blazers": { cats: ["Jassen & blazers"], kind: "jas" },

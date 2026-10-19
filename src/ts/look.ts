@@ -26,7 +26,7 @@ export function price(x: LookItem) {
 /** null: geen maat voor dit hoofdstuk. "": nog niet gemeten. */
 export function mySize(x: LookItem): string | null {
   const kind = S.person.chapterMap[x.c]?.kind;
-  if (!kind) return null;
+  if (!kind || !S.online) return null;
   const a = S.person.sizes.advice(S.body).find((r) => r[3] === kind);
   if (!a) return "";
   const fit = S.body.brandFit?.[brand(x)];

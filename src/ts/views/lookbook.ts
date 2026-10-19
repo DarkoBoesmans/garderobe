@@ -34,10 +34,10 @@ function card(x: LookItem, n: number) {
   <h3 class="c-card__title"><a href="${esc(x.u)}" target="_blank" rel="noopener noreferrer">${esc(x.d)}<span class="u-sr-only"> van ${esc(brand(x))}, opent ${esc(x.s)} in een nieuw tabblad</span></a></h3>
   <p class="c-card__meta">${x.b && x.b !== x.s ? `via ${esc(x.s)}${size ? " · " : ""}` : ""}${size}</p>
   <div>${h ? `<a class="c-tag" href="#kast">Heb je al: ${esc(itemName(h))}</a>` : ""}${x.pin ? `<a class="c-tag c-tag--accent" href="${esc(x.pin)}" target="_blank" rel="noopener noreferrer">Pinterest-match</a>` : ""}</div>
-  <div class="c-card__actions">
+  ${S.online ? `<div class="c-card__actions">
     <button type="button" class="c-link-btn" data-fav="${esc(x.id)}" aria-pressed="${fav}" aria-label="Favoriet: ${label}">${fav ? "Favoriet" : "Bewaar"}</button>
     <button type="button" class="c-link-btn" data-hide="${esc(x.id)}" aria-label="${hid ? "Terugzetten" : "Verwijder uit lookbook"}: ${label}">${hid ? "Terugzetten" : "Verwijder"}</button>
-  </div>
+  </div>` : ""}
 </article>`;
 }
 
@@ -55,7 +55,7 @@ export const lookbook: View = {
   <label class="c-toolbar__field c-toolbar__field--grow"><span>Zoek</span><input type="search" id="lq" placeholder="Merk, stuk of kleur" value="${esc(st.q)}"></label>
   <label class="c-toolbar__field"><span>Winkel</span><select id="lshop"><option value="">Alle winkels</option>${shops.map((s) => `<option${s === st.shop ? " selected" : ""}>${esc(s)}</option>`).join("")}</select></label>
   <label class="c-toolbar__field"><span>Sorteer</span><select id="lsort"><option value="">Eigen volgorde</option><option value="lo">Prijs, laag naar hoog</option><option value="hi">Prijs, hoog naar laag</option></select></label>
-  <div class="c-toolbar__seg" role="group" aria-label="Tonen">${FILTERS.map(([f, l]) => `<button type="button" class="c-link-btn" data-lf="${f}">${l}</button>`).join("")}</div>
+  <div class="c-toolbar__seg" role="group" aria-label="Tonen">${FILTERS.filter(([f]) => S.online || f === "all" || f === "pin").map(([f, l]) => `<button type="button" class="c-link-btn" data-lf="${f}">${l}</button>`).join("")}</div>
   <span class="c-toolbar__count" id="lcount" aria-live="polite"></span>
 </div>
 <nav class="c-toc" id="ltoc" aria-label="Hoofdstukken"></nav>
@@ -69,7 +69,7 @@ export const lookbook: View = {
     if (!document.getElementById("lbook")) return;
     const L = filtered(), all = S.look.items;
     const busy = st.q || st.shop || st.ch || st.f !== "all";
-    $("lfacts").innerHTML = [[all.length, "stuks"], [new Set(all.map((x) => x.s)).size, "winkels"], [S.look.dirs.length, "looks"], [all.filter(haveOf).length, "heb je al"]]
+    $("lfacts").innerHTML = [[all.length, "stuks"], [new Set(all.map((x) => x.s)).size, "winkels"], [S.look.dirs.length, "looks"], ...(S.online ? [[all.filter(haveOf).length, "heb je al"]] : [])]
       .map(([n, l]) => `<span class="c-hero__fact"><b>${n}</b>${l}</span>`).join("");
     const looks = $("looks");
     looks.hidden = !!busy;

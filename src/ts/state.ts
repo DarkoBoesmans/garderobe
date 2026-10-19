@@ -13,6 +13,8 @@ export const S = {
   assets: null as Claude.Assets | null,
   downloads: null as typeof Claude.downloads | null,
   canWrite: true,
+  /** false op GitHub Pages: daar is geen Claude-database, dus enkel het lookbook. */
+  online: typeof window !== "undefined" && !!window.claude,
   /** false tot de database antwoordt; dan tonen we "laden" in plaats van "leeg". */
   loaded: false,
 };

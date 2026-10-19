@@ -67,6 +67,8 @@ export interface Person {
   theme: string;
   dek: string;
   folder: string;
+  /** De privé-artifact op claude.ai, met kleerkast en maten. */
+  privateUrl: string;
   categories: string[];
   /** lookbookhoofdstuk naar kleerkastcategorieën en maatsoort */
   chapterMap: Record<string, { cats: string[]; kind?: string }>;

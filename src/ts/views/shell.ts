@@ -5,6 +5,7 @@ import { info } from "./info";
 import { kast } from "./kast";
 import { lookbook } from "./lookbook";
 import { maten } from "./maten";
+import { offline } from "./offline";
 
 export interface View { title: string; mount(el: HTMLElement): void; update(): void }
 
@@ -25,7 +26,7 @@ export function startShell(app: HTMLElement) {
 </div></header>
 <main id="view" class="o-wrap" tabindex="-1"></main>
 <footer class="o-wrap c-footer">
-  <span>Privé en niet-commercieel. Geen cookies, geen tracking.</span>
+  <span>${S.online ? "Privé en niet-commercieel" : "Niet-commercieel"}. Geen cookies, geen tracking.</span>
   <a href="#info">Privacy, gegevens en colofon</a>
 </footer>
 <dialog id="dlg" class="c-dialog"></dialog>`;
@@ -37,7 +38,7 @@ export function startShell(app: HTMLElement) {
 
 function go(moveFocus: boolean) {
   const hash = location.hash in ROUTES ? location.hash : "#lookbook";
-  current = ROUTES[hash]!;
+  current = !S.online && (hash === "#kast" || hash === "#maten") ? offline(hash) : ROUTES[hash]!;
   document.querySelectorAll(".c-masthead__link").forEach((a) => a.toggleAttribute("aria-current", a.getAttribute("href") === hash));
   document.querySelectorAll(".c-masthead__link[aria-current]").forEach((a) => a.setAttribute("aria-current", "page"));
   document.title = `${current.title} · ${S.person.name}`;

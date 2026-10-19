@@ -9,6 +9,7 @@ export const isList = (f: string) => LISTS.has(f);
 
 export async function connect() {
   const c = window.claude;
+  if (!c) { S.canWrite = false; S.loaded = true; render(); return; }
   const [db, user, assets, downloads] = await Promise.all([c.use("db"), c.use("user"), c.use("assets"), c.use("downloads")]);
   S.db = db; S.assets = assets; S.downloads = downloads;
   if (!db) { S.loaded = true; render(); return; }
