@@ -4,7 +4,8 @@ import { build } from "esbuild";
 import { compile } from "sass";
 import { cpSync, mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 
-const PEOPLE = { darko: "Darko", lana: "Lana" };
+// Titels blijven gelijk aan de bestaande artifacts.
+const PEOPLE = { darko: "Darko's Kleerkast", lana: "Lana's Garderobe" };
 const FONTS = {
   "instrument-serif-400.woff2": "@fontsource/instrument-serif/files/instrument-serif-latin-400-normal.woff2",
   "instrument-serif-400-italic.woff2": "@fontsource/instrument-serif/files/instrument-serif-latin-400-italic.woff2",
