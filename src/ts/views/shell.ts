@@ -27,7 +27,7 @@ export function startShell(app: HTMLElement) {
 </div></header>
 <main id="view" class="o-wrap" tabindex="-1"></main>
 <footer class="o-wrap c-footer">
-  <span>Ingelogd als ${esc(S.email || "demo-bezoeker")}. Niet-commercieel, geen tracking.</span>
+  <span>${S.email ? `Ingelogd als ${esc(S.email)}` : "Demo: deze kast en alles wat je toevoegt wordt na 24 uur gewist"}. Niet-commercieel, geen tracking.</span>
   <a href="#info">Privacy, gegevens en colofon</a>
   <button type="button" class="c-link-btn" data-logout>Uitloggen</button>
 </footer>

@@ -10,6 +10,8 @@ export const isList = (f: string) => LISTS.has(f);
 interface Row { id: string; data: Record<string, unknown>; photo_path: string | null; cutout_path: string | null }
 /** Velden die de app zelf toevoegt en nooit in `data` horen. */
 const LOCAL = ["id", "photo", "photos", "paths", "cutout"];
+/** Paden van de demo-kast: vaste bestanden in app/demo/, nooit in storage. */
+export const isStatic = (p: string) => /^demo\/[\w-]+\.webp$/.test(p);
 
 /** Laadt kast, maten en voorkeuren van de ingelogde gebruiker. Foto's via signed URL's van 1 uur. */
 export async function load() {
@@ -22,8 +24,9 @@ export async function load() {
   ]);
   if (it.error) throw it.error;
   const rows = it.data as Row[];
-  const paths = rows.flatMap((r) => [r.cutout_path, r.photo_path]).filter((p): p is string => !!p);
-  const url = new Map<string, string>();
+  // Demo-foto's zijn statische bestanden naast de app; al de rest is privé en krijgt een signed URL.
+  const paths = rows.flatMap((r) => [r.cutout_path, r.photo_path]).filter((p): p is string => !!p && !isStatic(p));
+  const url = new Map<string, string>(rows.flatMap((r) => [r.cutout_path, r.photo_path]).filter((p): p is string => !!p && isStatic(p)).map((p) => [p, p]));
   if (paths.length) {
     const { data } = await sb.storage.from(BUCKET).createSignedUrls(paths, 3600);
     data?.forEach((d) => d.path && d.signedUrl && url.set(d.path, d.signedUrl));
@@ -69,7 +72,8 @@ export async function saveItem(it: Item, patch: Record<string, unknown>) {
 export async function deleteItem(it: Item) {
   const { error } = await sb.from("items").delete().eq("id", it.id);
   if (error) throw error;
-  if (it.paths?.length) await sb.storage.from(BUCKET).remove(it.paths as string[]);
+  const own = (it.paths ?? []).filter((p) => !isStatic(p));
+  if (own.length) await sb.storage.from(BUCKET).remove(own);
   S.items = S.items.filter((x) => x.id !== it.id);
   render();
 }

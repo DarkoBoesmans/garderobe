@@ -6,3 +6,7 @@
 .c-lock__row { display: flex; flex-wrap: wrap; gap: 10px; align-items: end; }
 .c-lock__row input { flex: 1 1 200px; min-width: 0; }
 .c-lock__msg { font-size: 13px; color: var(--accent); min-height: 1.5em; }
+
+// Login: alternatieven onder het formulier, en de demo als tweede deur.
+.c-login__alt { display: flex; flex-wrap: wrap; gap: 4px 16px; font-size: 13px; }
+.c-login__demo { display: grid; gap: 10px; justify-items: start; margin-top: 18px; padding-top: 16px; border-top: 1px solid var(--line); font-size: 14px; color: var(--ink-2); }

@@ -1,6 +1,6 @@
 // Stuk toevoegen: foto opnieuw coderen (weg met EXIF en GPS), achtergrond weg in de browser, opladen.
 import { S } from "./state";
-import { load } from "./store";
+import { isStatic, load } from "./store";
 import { BUCKET, sb } from "./supa";
 
 const MAX = 1600;
@@ -66,7 +66,7 @@ export async function addPhotos(files: File[], removeBg: boolean, progress: (t: 
 export async function dropCutout(id: string, path: string) {
   const { error } = await sb.from("items").update({ cutout_path: null }).eq("id", id);
   if (error) throw error;
-  await sb.storage.from(BUCKET).remove([path]);
+  if (!isStatic(path)) await sb.storage.from(BUCKET).remove([path]);
   await load();
 }
 

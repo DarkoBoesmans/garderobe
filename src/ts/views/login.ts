@@ -36,6 +36,8 @@ export function showLogin(app: HTMLElement, mode: Mode = "in", note = "") {
       <input id="pw" name="pw" type="password" autocomplete="${mode === "in" ? "current-password" : "new-password"}" minlength="10" required>` : ""}
       <button class="c-btn">${button}</button>
       <p class="c-lock__msg" id="msg" role="status">${esc(note)}</p>
+      ${mode === "in" ? `<div class="c-login__demo"><p>Geen uitnodiging? Kijk rond in de kast van Jules, een verzonnen vintage-streetwear garderobe. Je kunt alles uitproberen, ook foto's toevoegen; na 24 uur wordt alles gewist.</p>
+      <button type="button" class="c-btn c-btn--ghost" data-demo>Bekijk de demo</button></div>` : ""}
       <p class="c-login__alt"><a class="c-link-btn" href="#info">Privacy en colofon</a>
         ${mode === "in" ? `<button type="button" class="c-link-btn" data-mode="reset">Wachtwoord vergeten</button> <button type="button" class="c-link-btn" data-mode="up">Uitgenodigd? Maak je account</button>`
           : mode !== "new" ? `<button type="button" class="c-link-btn" data-mode="in">Terug naar inloggen</button>` : ""}
@@ -46,6 +48,14 @@ export function showLogin(app: HTMLElement, mode: Mode = "in", note = "") {
   const f = app.querySelector<HTMLFormElement>("#auth")!, msg = app.querySelector("#msg")!;
   app.querySelectorAll<HTMLElement>("[data-mode]").forEach((b) => b.addEventListener("click", () => showLogin(app, b.dataset.mode as Mode)));
   (f.querySelector("input") as HTMLInputElement).focus();
+  app.querySelector("[data-demo]")?.addEventListener("click", async () => {
+    msg.textContent = "De demo-kast wordt klaargezet…";
+    const { error } = await sb.auth.signInAnonymously();
+    if (error) { msg.textContent = /disabled|not allowed/i.test(error.message) ? "De demo staat even uit." : nl(error); return; }
+    const r = await sb.rpc("start_demo");
+    if (r.error) { msg.textContent = "De demo-kast kon niet klaargezet worden. Probeer het opnieuw."; await sb.auth.signOut({ scope: "local" }); return; }
+    location.reload();
+  });
   f.addEventListener("submit", async (e) => {
     e.preventDefault();
     const email = (f.elements.namedItem("email") as HTMLInputElement | null)?.value.trim() ?? "";

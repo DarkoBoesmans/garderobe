@@ -54,6 +54,7 @@ for (const book of ["darko", "lana"]) {
   cpSync(`sheets/${book}`, `dist/app/sheets/${book}`, { recursive: true });
   cpSync(`data/${book}-lookbook.json`, `dist/app/data/${book}.json`);
 }
+cpSync("demo", "dist/app/demo", { recursive: true });
 cpSync("vault", "dist/app/vault", { recursive: true }); // ponytail: alleen voor de eenmalige import, daarna weg
 writeFileSync("dist/app/index.html", doc("Garderobe", `<div id="app"><main style="padding:24px"><h1>Garderobe</h1><p>De garderobe laadt…</p></main></div>`, "", `<script type="module" src="app.js"></script>`));
 
