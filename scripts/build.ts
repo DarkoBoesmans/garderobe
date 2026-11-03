@@ -65,6 +65,7 @@ writeFileSync("dist/index.html", doc("Garderobe", `
   <header class="c-stand__head o-wrap">
     <h1 class="c-stand__title">Garde<em>robe.</em></h1>
     <p class="c-stand__dek">Je kleerkast, uitgeknipt en op papier gelegd. Met outfits, maten en een lookbook dat weet wat je al hebt.</p>
+    <p class="c-stand__acts"><a class="c-btn" href="app/#demo">Bekijk de demo</a> <a class="c-btn c-btn--ghost" href="app/">Log in op je kast</a></p>
   </header>
   <div class="c-stand__covers o-wrap">${landing()}</div>
   <p class="c-stand__foot o-wrap">Niet commercieel. Broncode op GitHub onder AGPL-3.0. <a href="app/#info">Privacy en colofon</a></p>

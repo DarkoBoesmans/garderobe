@@ -79,7 +79,7 @@ export const kast: View = {
     fill("kstyle", [...new Set(S.items.flatMap((i) => arr(i.style)))].sort(), "Alle", st.style);
     document.querySelectorAll<HTMLElement>("[data-kv]").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.kv === st.view)));
     // Eenmalige overstap: Darko's oude, versleutelde kast importeren zolang zijn kast leeg is.
-    const showImport = S.loaded && !S.items.length && S.person.key === "darko";
+    const showImport = S.loaded && !S.items.length && S.person.key !== "demo";
     if (showImport && !$("kimport").innerHTML) $("kimport").innerHTML = `<form class="c-lock" id="kimp"><p class="c-hero__dek">Je kast is leeg. Importeer je oude kleerkast met het wachtwoord van de vergrendelde versie.</p>
       <label class="c-lock__label" for="kimppw">Oud wachtwoord</label><div class="c-lock__row"><input id="kimppw" type="password" autocomplete="off" required><button class="c-btn">Importeer</button></div>
       <p class="c-lock__msg" id="kimpmsg" role="status"></p></form>`;

@@ -7,11 +7,14 @@
 .c-stand__title { @include display(clamp(64px, 12vw, 168px)); margin-left: -.04em; }
 .c-stand__title em { color: var(--accent); }
 .c-stand__dek { font: italic 400 clamp(20px, 2vw, 26px)/1.2 var(--serif); max-width: 22ch; }
+.c-stand__acts { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 20px; }
 .c-stand__covers {
   display: grid;
   gap: clamp(28px, 5vw, 72px);
   @include md { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  @include lg { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 }
+.c-cover--demo .c-cover__hero { padding: 8% 10% 30%; background-origin: content-box; }
 .c-stand__foot { font-size: 13px; color: var(--ink-2); }
 
 .c-cover {

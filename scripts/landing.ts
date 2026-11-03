@@ -17,8 +17,25 @@ function sprite(look: Look, id: string, base: string, cls: string) {
   return `<span class="${cls}" role="img" aria-label="${esc(`${x.s}: ${x.d}`)}" style="aspect-ratio:${ratio};background-image:url(${base}/${x.sh}.jpg);background-size:${c * 100}% ${r * 100}%;background-position:${pos}"></span>`;
 }
 
+/** De demo-cover van Jules: uitsneden in plaats van winkelfoto's, en een knop die meteen de demo opent. */
+function demoCover() {
+  const cut = (f: string, cls: string, label: string) =>
+    `<span class="${cls}" role="img" aria-label="${label}" style="aspect-ratio:3/4;background-image:url(app/demo/${f}-c.webp);background-size:contain;background-position:center"></span>`;
+  return `<a class="c-cover c-cover--demo" href="app/#demo" data-person="darko">
+  <span class="c-cover__mast"><span>Garderobe</span><span>N° 00</span></span>
+  ${cut("denim", "c-cover__hero", "Raw denim trucker jacket")}
+  <span class="c-cover__inset">${cut("vans-rood", "c-cover__thumb", "Rode suède sneakers")}${cut("jeans-licht", "c-cover__thumb", "Lichte baggy jeans")}</span>
+  <span class="c-cover__lines">
+    <span class="c-cover__name">Jules<em>.</em></span>
+    <span class="c-cover__theme">Vintage streetwear, verzonnen</span>
+    <span class="c-cover__facts">14 stuks · alles tweedehands · na 24 uur gewist</span>
+  </span>
+  <span class="c-cover__cta">Open de demo, zonder account</span>
+</a>`;
+}
+
 export function landing() {
-  return COVERS.map((p) => {
+  return demoCover() + COVERS.map((p) => {
     const look = JSON.parse(readFileSync(`data/${p.key}-lookbook.json`, "utf8")) as Look;
     const [hero, ...rest] = look.dirs[0]!.p;
     return `<a class="c-cover" href="app/" data-person="${p.key}">
@@ -30,7 +47,7 @@ export function landing() {
     <span class="c-cover__theme">${esc(p.theme)}</span>
     <span class="c-cover__facts">${look.items.length} stuks · ${new Set(look.items.map((i) => i.s)).size} winkels · ${look.dirs.length} looks</span>
   </span>
-  <span class="c-cover__cta">Log in om te openen</span>
+  <span class="c-cover__cta">Log in om je kast te openen</span>
 </a>`;
   }).join("");
 }

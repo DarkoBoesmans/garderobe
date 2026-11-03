@@ -5,7 +5,7 @@ import { load } from "./store";
 import { sb } from "./supa";
 import type { Lookbook } from "./types";
 import { info } from "./views/info";
-import { showLogin } from "./views/login";
+import { showLogin, startDemo } from "./views/login";
 import { startShell } from "./views/shell";
 
 const app = document.getElementById("app")!;
@@ -19,14 +19,23 @@ window.addEventListener("hashchange", () => { if (!S.uid) location.hash === "#in
 
 async function boot() {
   // Terug van een bevestigings- of resetmail: de code inwisselen voor een sessie, dan uit de URL halen.
-  const code = new URLSearchParams(location.search).get("code");
+  const q = new URLSearchParams(location.search), code = q.get("code"), err = q.get("error_description");
+  if (err) {
+    history.replaceState(null, "", location.pathname);
+    return showLogin(app, "in", /saving new user|Registratie/i.test(err) ? "Dit account is niet uitgenodigd. Vraag een uitnodiging of bekijk de demo." : "Inloggen lukte niet. Probeer het opnieuw.");
+  }
   if (code) {
     await sb.auth.exchangeCodeForSession(code);
     history.replaceState(null, "", location.pathname + location.hash);
   }
   const { data } = await sb.auth.getSession();
   const session = data.session;
-  if (!session) return location.hash === "#info" ? showPrivacy() : showLogin(app);
+  if (!session) {
+    if (location.hash === "#info") return showPrivacy();
+    showLogin(app);
+    if (location.hash === "#demo") { history.replaceState(null, "", location.pathname); startDemo(app); }
+    return;
+  }
   S.uid = session.user.id;
   S.email = session.user.email ?? "";
   const { data: prof } = await sb.from("profiles").select("person").eq("id", S.uid).maybeSingle();

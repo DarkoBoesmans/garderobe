@@ -10,12 +10,23 @@ const TEXT: Record<Mode, [string, string, string]> = {
   new: ["Kies een nieuw", "Wachtwoord opslaan", "Minstens 10 tekens. Een zin van vier woorden werkt goed."],
 };
 
+/** Anoniem inloggen en de demo-kast van Jules klaarzetten. */
+export async function startDemo(app: HTMLElement) {
+  const say = (t: string) => { const m = app.querySelector("#msg"); if (m) m.textContent = t; };
+  say("De demo-kast wordt klaargezet…");
+  const { error } = await sb.auth.signInAnonymously();
+  if (error) return /disabled|not allowed/i.test(error.message) ? showLogin(app, "in", "De demo staat even uit.") : showLogin(app, "in", nl(error));
+  const r = await sb.rpc("start_demo");
+  if (r.error) { await sb.auth.signOut({ scope: "local" }); return showLogin(app, "in", "De demo-kast kon niet klaargezet worden. Probeer het opnieuw."); }
+  location.replace(location.pathname);
+}
+
 /** Supabase geeft Engelse foutcodes; vertaal de gewone gevallen, verberg de rest. */
 function nl(e: { message?: string; code?: string }) {
   const m = `${e.code ?? ""} ${e.message ?? ""}`;
   if (/invalid_credentials|Invalid login/i.test(m)) return "E-mail of wachtwoord klopt niet.";
   if (/email_not_confirmed/i.test(m)) return "Bevestig eerst je e-mailadres via de mail die je kreeg.";
-  if (/Registratie is gesloten|Database error saving new user/i.test(m)) return "Dit e-mailadres is niet uitgenodigd.";
+  if (/Registratie is gesloten|Database error saving new user|saving new user/i.test(m)) return "Dit e-mailadres is niet uitgenodigd.";
   if (/rate|too many/i.test(m)) return "Te veel pogingen. Wacht een paar minuten.";
   if (/weak|password/i.test(m)) return "Dat wachtwoord is te zwak. Kies minstens 10 tekens.";
   return "Dat lukte niet. Probeer het opnieuw.";
@@ -35,6 +46,7 @@ export function showLogin(app: HTMLElement, mode: Mode = "in", note = "") {
       ${mode !== "reset" ? `<label class="c-lock__label" for="pw">Wachtwoord</label>
       <input id="pw" name="pw" type="password" autocomplete="${mode === "in" ? "current-password" : "new-password"}" minlength="10" required>` : ""}
       <button class="c-btn">${button}</button>
+      ${mode === "in" ? `<div class="c-login__oauth"><button type="button" class="c-btn c-btn--ghost" data-oauth="google">Verder met Google</button><button type="button" class="c-btn c-btn--ghost" data-oauth="github">Verder met GitHub</button></div>` : ""}
       <p class="c-lock__msg" id="msg" role="status">${esc(note)}</p>
       ${mode === "in" ? `<div class="c-login__demo"><p>Geen uitnodiging? Kijk rond in de kast van Jules, een verzonnen vintage-streetwear garderobe. Je kunt alles uitproberen, ook foto's toevoegen; na 24 uur wordt alles gewist.</p>
       <button type="button" class="c-btn c-btn--ghost" data-demo>Bekijk de demo</button></div>` : ""}
@@ -48,14 +60,12 @@ export function showLogin(app: HTMLElement, mode: Mode = "in", note = "") {
   const f = app.querySelector<HTMLFormElement>("#auth")!, msg = app.querySelector("#msg")!;
   app.querySelectorAll<HTMLElement>("[data-mode]").forEach((b) => b.addEventListener("click", () => showLogin(app, b.dataset.mode as Mode)));
   (f.querySelector("input") as HTMLInputElement).focus();
-  app.querySelector("[data-demo]")?.addEventListener("click", async () => {
-    msg.textContent = "De demo-kast wordt klaargezet…";
-    const { error } = await sb.auth.signInAnonymously();
-    if (error) { msg.textContent = /disabled|not allowed/i.test(error.message) ? "De demo staat even uit." : nl(error); return; }
-    const r = await sb.rpc("start_demo");
-    if (r.error) { msg.textContent = "De demo-kast kon niet klaargezet worden. Probeer het opnieuw."; await sb.auth.signOut({ scope: "local" }); return; }
-    location.reload();
-  });
+  app.querySelector("[data-demo]")?.addEventListener("click", () => startDemo(app));
+  app.querySelectorAll<HTMLElement>("[data-oauth]").forEach((b) => b.addEventListener("click", async () => {
+    msg.textContent = "Je gaat naar " + (b.dataset.oauth === "google" ? "Google" : "GitHub") + "…";
+    const { error } = await sb.auth.signInWithOAuth({ provider: b.dataset.oauth as "google" | "github", options: { redirectTo: location.origin + location.pathname } });
+    if (error) msg.textContent = /not enabled|provider/i.test(error.message) ? "Deze manier van inloggen staat nog niet aan." : nl(error);
+  }));
   f.addEventListener("submit", async (e) => {
     e.preventDefault();
     const email = (f.elements.namedItem("email") as HTMLInputElement | null)?.value.trim() ?? "";
