@@ -51,8 +51,9 @@ $bp-lg: 1100px;
 // Eén accentkleur per persoon, licht en donker.
 [data-person="darko"] { --accent-l: #{$accent-darko}; --accent-d: #{$accent-darko-dark}; }
 [data-person="lana"] { --accent-l: #{$accent-lana}; --accent-d: #{$accent-lana-dark}; }
-body, [data-person] { --accent: var(--accent-l); }
+// Zonder persoon (voorpagina, login, 404) valt het accent terug op wijnrood, nooit op niets.
+body, [data-person] { --accent: var(--accent-l, #{$accent-lana}); }
 @media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) :is(body, [data-person]) { --accent: var(--accent-d); }
+  :root:not([data-theme="light"]) :is(body, [data-person]) { --accent: var(--accent-d, #{$accent-lana-dark}); }
 }
-:root[data-theme="dark"] :is(body, [data-person]) { --accent: var(--accent-d); }
+:root[data-theme="dark"] :is(body, [data-person]) { --accent: var(--accent-d, #{$accent-lana-dark}); }

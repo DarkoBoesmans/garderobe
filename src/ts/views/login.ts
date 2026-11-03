@@ -36,6 +36,7 @@ export function showLogin(app: HTMLElement, mode: Mode = "in", note = "") {
   const [kicker, button, dek] = TEXT[mode];
   const word = mode === "in" ? "garderobe." : mode === "up" ? "account." : "wachtwoord.";
   app.innerHTML = `
+<a class="c-skip" href="#view">Naar het formulier</a>
 <main class="o-wrap c-login" id="view" tabindex="-1">
   <section class="c-hero">
     <div><p class="c-hero__kicker"><a href="../">Garderobe</a></p><h1 class="c-hero__title">${kicker} <em>${word}</em></h1></div>
@@ -46,7 +47,6 @@ export function showLogin(app: HTMLElement, mode: Mode = "in", note = "") {
       ${mode !== "reset" ? `<label class="c-lock__label" for="pw">Wachtwoord</label>
       <input id="pw" name="pw" type="password" autocomplete="${mode === "in" ? "current-password" : "new-password"}" minlength="10" required>` : ""}
       <button class="c-btn">${button}</button>
-      ${mode === "in" ? `<div class="c-login__oauth"><button type="button" class="c-btn c-btn--ghost" data-oauth="google">Verder met Google</button><button type="button" class="c-btn c-btn--ghost" data-oauth="github">Verder met GitHub</button></div>` : ""}
       <p class="c-lock__msg" id="msg" role="status">${esc(note)}</p>
       ${mode === "in" ? `<div class="c-login__demo"><p>Geen uitnodiging? Kijk rond in de kast van Jules, een verzonnen vintage-streetwear garderobe. Je kunt alles uitproberen, ook foto's toevoegen; na 24 uur wordt alles gewist.</p>
       <button type="button" class="c-btn c-btn--ghost" data-demo>Bekijk de demo</button></div>` : ""}
@@ -61,11 +61,6 @@ export function showLogin(app: HTMLElement, mode: Mode = "in", note = "") {
   app.querySelectorAll<HTMLElement>("[data-mode]").forEach((b) => b.addEventListener("click", () => showLogin(app, b.dataset.mode as Mode)));
   (f.querySelector("input") as HTMLInputElement).focus();
   app.querySelector("[data-demo]")?.addEventListener("click", () => startDemo(app));
-  app.querySelectorAll<HTMLElement>("[data-oauth]").forEach((b) => b.addEventListener("click", async () => {
-    msg.textContent = "Je gaat naar " + (b.dataset.oauth === "google" ? "Google" : "GitHub") + "…";
-    const { error } = await sb.auth.signInWithOAuth({ provider: b.dataset.oauth as "google" | "github", options: { redirectTo: location.origin + location.pathname } });
-    if (error) msg.textContent = /not enabled|provider/i.test(error.message) ? "Deze manier van inloggen staat nog niet aan." : nl(error);
-  }));
   f.addEventListener("submit", async (e) => {
     e.preventDefault();
     const email = (f.elements.namedItem("email") as HTMLInputElement | null)?.value.trim() ?? "";

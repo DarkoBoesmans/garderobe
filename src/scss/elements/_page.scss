@@ -15,3 +15,8 @@ a:hover { color: var(--accent); }
 h1, h2, h3 { font-weight: 400; }
 // Band boven de sticky masthead op telefoons met een notch.
 body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 30; background: var(--paper); }
+
+// Paginaovergang tussen voorpagina, app en 404 (browsers zonder ondersteuning wisselen gewoon).
+@view-transition { navigation: auto; }
+::view-transition-old(root), ::view-transition-new(root) { animation-duration: .35s; }
+@media (prefers-reduced-motion: reduce) { ::view-transition-group(*), ::view-transition-old(*), ::view-transition-new(*) { animation: none !important; } }

@@ -13,7 +13,9 @@
   margin-left: -.04em;
 }
 .c-hero__title em { color: var(--accent); }
-.c-hero__kicker { @include label; color: var(--ink-2); margin-bottom: 18px; }
+.c-hero__kicker { @include label; color: var(--ink-2); margin-bottom: 18px; position: relative; z-index: 1; }
+.c-hero__kicker a { display: inline-block; padding-block: 14px; margin-block: -14px; color: inherit; }
+.c-hero__kicker a:hover { color: var(--accent); }
 .c-hero__theme { font: italic 400 clamp(24px, 2.4vw, 32px)/1.1 var(--serif); margin-bottom: 14px; }
 .c-hero__dek { color: var(--ink-2); max-width: 46ch; }
 .c-hero__dek code { font: 500 13px var(--sans); color: var(--ink); background: var(--paper-2); padding: 1px 5px; word-break: break-all; }

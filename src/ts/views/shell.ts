@@ -6,16 +6,20 @@ import { kast } from "./kast";
 import { lookbook } from "./lookbook";
 import { maten } from "./maten";
 import { outfits } from "./outfits";
+import { ADMIN, admin } from "./admin";
 import { sb } from "../supa";
 
 export interface View { title: string; mount(el: HTMLElement): void; update(): void }
 
 const ROUTES: Record<string, View> = { "#kast": kast, "#outfits": outfits, "#lookbook": lookbook, "#maten": maten, "#info": info };
 const NAV: [string, string][] = [["#kast", "Kast"], ["#outfits", "Outfits"], ["#lookbook", "Lookbook"], ["#maten", "Maten"], ["#info", "Colofon"]];
+/** Beheer verschijnt enkel voor de beheerder; de database weigert iedereen anders sowieso. */
+const isAdmin = () => S.email.toLowerCase() === ADMIN;
 let current: View = kast;
 
 export function startShell(app: HTMLElement) {
   const p = S.person;
+  if (isAdmin()) { ROUTES["#admin"] = admin; NAV.push(["#admin", "Beheer"]); }
   document.documentElement.lang = "nl";
   document.body.dataset.person = p.key;
   app.innerHTML = `

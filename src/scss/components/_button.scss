@@ -3,6 +3,7 @@
 
 .c-btn {
   @include label;
+  transition: background-color .2s, color .2s, border-color .2s;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -20,7 +21,7 @@
 .c-btn--ghost {
   background: transparent;
   color: var(--ink);
-  &:hover { background: transparent; color: var(--accent); }
+  &:hover { background: var(--ink); border-color: var(--ink); color: var(--paper); }
 }
 .c-btn--danger {
   background: transparent;
@@ -38,8 +39,10 @@
   min-height: 44px;
   cursor: pointer;
   color: var(--ink-2);
-  text-decoration: underline;
-  text-underline-offset: 4px;
-  &:hover { color: var(--accent); text-decoration-thickness: 2px; }
+  text-decoration: none;
+  // Onderlijn als achtergrond: groeit bij hover van 1 naar 3 px, in de accentkleur.
+  background: linear-gradient(currentColor, currentColor) 0 calc(100% - 10px) / 100% 1px no-repeat;
+  transition: background-size .25s, color .2s;
+  &:hover { color: var(--accent); background-size: 100% 3px; }
   &[aria-pressed="true"] { color: var(--accent); }
 }
