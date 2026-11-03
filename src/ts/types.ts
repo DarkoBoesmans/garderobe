@@ -32,20 +32,15 @@ export interface Item {
   season?: Field;
   photo?: string;
   photos?: string[];
+  /** Opslagpaden in Supabase (uitsnede eerst). */
+  paths?: string[];
+  /** Signed URL van de uitsnede, als die er is. */
+  cutout?: string;
   file?: Field;
   files?: Field;
   added?: string;
   missing?: Field;
   [k: string]: unknown;
-}
-export interface Question {
-  id: string;
-  itemId: string;
-  field: string;
-  question: string;
-  options?: string[];
-  status: "open" | "answered" | "skipped" | "applied";
-  answer?: string;
 }
 export interface Body { brandFit?: Record<string, string>; measuredAt?: string; [k: string]: unknown }
 export interface Prefs { fav: string[]; hidden: string[] }
@@ -60,15 +55,15 @@ export interface SizeSystem {
   kind: Record<string, string[]>;
 }
 export interface Person {
-  key: "darko" | "lana";
+  key: "darko" | "lana" | "demo";
+  /** Welk lookbook (data en sprites) deze persoon gebruikt; standaard de eigen key. */
+  book?: "darko" | "lana";
   name: string;
   issue: string;
   season: string;
   theme: string;
   dek: string;
   folder: string;
-  /** De privé-artifact op claude.ai, met kleerkast en maten. */
-  privateUrl: string;
   categories: string[];
   /** lookbookhoofdstuk naar kleerkastcategorieën en maatsoort */
   chapterMap: Record<string, { cats: string[]; kind?: string }>;

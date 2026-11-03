@@ -8,8 +8,19 @@
     "resolveJsonModule": true,
     "allowImportingTsExtensions": true,
     "noEmit": true,
-    "lib": ["ES2022", "DOM", "DOM.Iterable"],
-    "types": ["node"]
+    "lib": [
+      "ES2022",
+      "DOM",
+      "DOM.Iterable",
+      "WebWorker"
+    ],
+    "types": [
+      "node"
+    ],
+    "skipLibCheck": true
   },
-  "include": ["src/ts", "types", "scripts"]
+  "include": [
+    "src/ts",
+    "scripts"
+  ]
 }

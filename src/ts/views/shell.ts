@@ -5,7 +5,7 @@ import { info } from "./info";
 import { kast } from "./kast";
 import { lookbook } from "./lookbook";
 import { maten } from "./maten";
-import { offline } from "./offline";
+import { sb } from "../supa";
 
 export interface View { title: string; mount(el: HTMLElement): void; update(): void }
 
@@ -26,19 +26,21 @@ export function startShell(app: HTMLElement) {
 </div></header>
 <main id="view" class="o-wrap" tabindex="-1"></main>
 <footer class="o-wrap c-footer">
-  <span>${S.online ? "Privé en niet-commercieel" : "Niet-commercieel"}. Geen cookies, geen tracking.</span>
+  <span>Ingelogd als ${esc(S.email || "demo-bezoeker")}. Niet-commercieel, geen tracking.</span>
   <a href="#info">Privacy, gegevens en colofon</a>
+  <button type="button" class="c-link-btn" data-logout>Uitloggen</button>
 </footer>
 <dialog id="dlg" class="c-dialog"></dialog>`;
   window.addEventListener("hashchange", () => go(true));
   app.querySelector("[data-skip]")!.addEventListener("click", (e) => { e.preventDefault(); document.getElementById("view")!.focus(); });
+  app.querySelector("[data-logout]")!.addEventListener("click", () => sb.auth.signOut());
   onRender(() => current.update());
   go(false);
 }
 
 function go(moveFocus: boolean) {
   const hash = location.hash in ROUTES ? location.hash : "#lookbook";
-  current = !S.online && !S.unlocked && (hash === "#kast" || hash === "#maten") ? offline(hash) : ROUTES[hash]!;
+  current = ROUTES[hash]!;
   document.querySelectorAll(".c-masthead__link").forEach((a) => a.toggleAttribute("aria-current", a.getAttribute("href") === hash));
   document.querySelectorAll(".c-masthead__link[aria-current]").forEach((a) => a.setAttribute("aria-current", "page"));
   document.title = `${current.title} · ${S.person.name}`;

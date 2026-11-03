@@ -1,22 +1,15 @@
 // Eén plek voor de toestand van de pagina. Views lezen hieruit en roepen render() aan.
-import type { Body, Item, Lookbook, Person, Prefs, Question } from "./types";
+import type { Body, Item, Lookbook, Person, Prefs } from "./types";
 
 export const S = {
   person: undefined as unknown as Person,
   look: undefined as unknown as Lookbook,
+  uid: "",
+  email: "",
   items: [] as Item[],
-  qs: [] as Question[],
   body: {} as Body,
-  meta: null as Record<string, unknown> | null,
   prefs: { fav: [], hidden: [] } as Prefs,
-  db: null as DB | null,
-  assets: null as Claude.Assets | null,
-  downloads: null as typeof Claude.downloads | null,
   canWrite: true,
-  /** false op GitHub Pages: daar is geen Claude-database, dus enkel het lookbook. */
-  /** true op GitHub Pages nadat het wachtwoord de kleerkast heeft ontsleuteld (alleen lezen). */
-  unlocked: false,
-  online: typeof window !== "undefined" && !!window.claude,
   /** false tot de database antwoordt; dan tonen we "laden" in plaats van "leeg". */
   loaded: false,
 };

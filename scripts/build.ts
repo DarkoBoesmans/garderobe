@@ -1,65 +1,79 @@
-// Bouwt dist/ voor twee bestemmingen:
-// - dist/<persoon>/artifact.html + bestanden: de privé-artifact op claude.ai (fragment, Claude zet het skelet errond)
-// - dist/ als geheel: de openbare GitHub Pages-site (index.html per persoon en een voorpagina)
+// Bouwt dist/ voor GitHub Pages:
+// - dist/index.html: voorpagina met covers
+// - dist/app/: de app (login via Supabase, kast, outfits, lookbook, maten)
 import { build } from "esbuild";
 import { compile } from "sass";
 import { landing } from "./landing.ts";
-import { cpSync, mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { cpSync, mkdirSync, rmSync, writeFileSync } from "node:fs";
 
-// Titels blijven gelijk aan de bestaande artifacts.
-const PEOPLE = { darko: "Darko's Kleerkast", lana: "Lana's Garderobe" };
+const SUPA = "https://uubsuzhtpokskjfpcets.supabase.co";
 const FONTS = {
   "instrument-serif-400.woff2": "@fontsource/instrument-serif/files/instrument-serif-latin-400-normal.woff2",
   "instrument-serif-400-italic.woff2": "@fontsource/instrument-serif/files/instrument-serif-latin-400-italic.woff2",
   "archivo-wdth.woff2": "@fontsource-variable/archivo/files/archivo-latin-wdth-normal.woff2",
 };
-const DESC = "Lookbook voor herfst en winter 2026: looks, stukken en prijzen uit Zara, Massimo Dutti, Uniqlo en meer.";
+const DESC = "Een digitale kleerkast met uitgeknipte stukken, outfits, maten en een lookbook. Showcase van Darko Boesmans.";
 const ICON = `data:image/svg+xml,${encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><rect width="32" height="32" fill="#0D0D0C"/><text x="16" y="24" font-family="Georgia,serif" font-style="italic" font-size="24" fill="#F6F6F3" text-anchor="middle">G</text></svg>')}`;
-const doc = (title: string, body: string, base = "") => `<!doctype html>
+// Content Security Policy: GitHub Pages kan geen headers zetten, dus via een meta-tag.
+// 'unsafe-inline' alleen voor stijlen (sprite-posities staan in style-attributen); scripts nooit inline.
+const CSP = [
+  "default-src 'self'",
+  `connect-src 'self' ${SUPA} wss://${SUPA.slice(8)}`,
+  "script-src 'self'",
+  // De achtergrondverwijderaar draait in een eigen worker-bestand. Workers krijgen hun CSP van hun eigen
+  // response (GitHub Pages stuurt geen), zodat de eval en WASM van die bibliotheek de pagina niet raken.
+  "worker-src 'self'",
+  `img-src 'self' data: blob: ${SUPA}`,
+  "style-src 'self' 'unsafe-inline'",
+  "font-src 'self'",
+  "object-src 'none'",
+  "base-uri 'none'",
+  "form-action 'self'",
+].join("; ");
+const doc = (title: string, body: string, base = "", head = "") => `<!doctype html>
 <html lang="nl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta http-equiv="Content-Security-Policy" content="${CSP}"><meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="robots" content="noindex"><title>${title}</title><meta name="description" content="${DESC}">
 <meta property="og:title" content="${title}"><meta property="og:description" content="${DESC}"><meta name="twitter:card" content="summary">
-<link rel="icon" href="${ICON}"><link rel="preload" href="${base}fonts/instrument-serif-400.woff2" as="font" type="font/woff2" crossorigin><link rel="stylesheet" href="${base}app.css"></head>
+<link rel="icon" href="${ICON}"><link rel="preload" href="${base}fonts/instrument-serif-400.woff2" as="font" type="font/woff2" crossorigin><link rel="stylesheet" href="${base}app.css">${head}</head>
 <body>${body}</body></html>
 `;
 
 const css = compile("src/scss/main.scss", { style: "compressed" }).css;
-const fragment = readFileSync("src/index.html", "utf8");
 rmSync("dist", { recursive: true, force: true });
+mkdirSync("dist/app/data", { recursive: true });
 
-for (const [key, title] of Object.entries(PEOPLE)) {
-  const out = `dist/${key}`;
-  mkdirSync(`${out}/fonts`, { recursive: true });
-  await build({ entryPoints: [`src/ts/entries/${key}.ts`], bundle: true, minify: true, format: "iife", target: "es2020", outfile: `${out}/app.js` });
-  writeFileSync(`${out}/app.css`, css);
-  const page = fragment.replaceAll("{{NAME}}", title);
-  writeFileSync(`${out}/artifact.html`, page);
-  writeFileSync(`${out}/index.html`, doc(title, page.replace(/<title>.*<\/title>\n|<link rel="stylesheet"[^>]*>\n/g, "")));
-  for (const [to, from] of Object.entries(FONTS)) cpSync(`node_modules/${from}`, `${out}/fonts/${to}`);
-  cpSync(`sheets/${key}`, `${out}/sheets`, { recursive: true });
-  cpSync(`vault/${key}.bin`, `${out}/vault.bin`); // versleuteld; enkel voor GitHub Pages
-  console.log("gebouwd:", out);
+// De app en de worker voor de achtergrond. De worker laadt pas bij het eerste opladen.
+await build({ entryPoints: ["src/ts/app.ts", "src/ts/cutout.worker.ts"], bundle: true, minify: true, format: "esm", splitting: true, target: "es2022", outdir: "dist/app", entryNames: "[name]", chunkNames: "chunks/[name]-[hash]" });
+for (const dir of ["dist", "dist/app"]) {
+  writeFileSync(`${dir}/app.css`, css);
+  mkdirSync(`${dir}/fonts`, { recursive: true });
+  for (const [to, from] of Object.entries(FONTS)) cpSync(`node_modules/${from}`, `${dir}/fonts/${to}`);
 }
+for (const book of ["darko", "lana"]) {
+  cpSync(`sheets/${book}`, `dist/app/sheets/${book}`, { recursive: true });
+  cpSync(`data/${book}-lookbook.json`, `dist/app/data/${book}.json`);
+}
+cpSync("vault", "dist/app/vault", { recursive: true }); // ponytail: alleen voor de eenmalige import, daarna weg
+writeFileSync("dist/app/index.html", doc("Garderobe", `<div id="app"><main style="padding:24px"><h1>Garderobe</h1><p>De garderobe laadt…</p></main></div>`, "", `<script type="module" src="app.js"></script>`));
 
-// Voorpagina van de openbare site.
-writeFileSync("dist/app.css", css);
-cpSync("dist/darko/fonts", "dist/fonts", { recursive: true });
+// Voorpagina en 404.
 writeFileSync("dist/.nojekyll", "");
 writeFileSync("dist/index.html", doc("Garderobe", `
 <main class="c-stand">
   <header class="c-stand__head o-wrap">
     <h1 class="c-stand__title">Garde<em>robe.</em></h1>
-    <p class="c-stand__dek">Twee lookbooks voor herfst en winter 2026. Kies een cover.</p>
+    <p class="c-stand__dek">Je kleerkast, uitgeknipt en op papier gelegd. Met outfits, maten en een lookbook dat weet wat je al hebt.</p>
   </header>
   <div class="c-stand__covers o-wrap">${landing()}</div>
-  <p class="c-stand__foot o-wrap">Niet commercieel. Productfoto's zijn van de winkels en linken naar de bron. <a href="lana/#info">Privacy en colofon</a></p>
-</main>`));
+  <p class="c-stand__foot o-wrap">Niet commercieel. Broncode op GitHub onder AGPL-3.0. <a href="app/#info">Privacy en colofon</a></p>
+</main>`).replace("<body>", `<body data-person="lana">`));
 writeFileSync("dist/404.html", doc("Niet gevonden · Garderobe", `
-<main class="c-stand" data-person="lana">
+<main class="c-stand">
   <header class="c-stand__head o-wrap">
     <h1 class="c-stand__title">Niet in de <em>kast.</em></h1>
-    <p class="c-stand__dek">Deze pagina bestaat niet. Kies een van de twee lookbooks.</p>
+    <p class="c-stand__dek">Deze pagina bestaat niet.</p>
   </header>
-  <p class="o-wrap"><a class="c-btn" href="/garderobe/lana/">Lana</a> <a class="c-btn c-btn--ghost" href="/garderobe/darko/">Darko</a></p>
+  <p class="o-wrap"><a class="c-btn" href="/garderobe/">Naar de voorpagina</a> <a class="c-btn c-btn--ghost" href="/garderobe/app/">Inloggen</a></p>
 </main>`, "/garderobe/").replace("<body>", `<body data-person="lana">`));
-console.log("gebouwd: dist (GitHub Pages)");
+console.log("gebouwd: dist");

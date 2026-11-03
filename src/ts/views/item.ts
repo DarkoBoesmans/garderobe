@@ -3,6 +3,7 @@ import { S } from "../state";
 import { deleteItem, isList, saveItem, why } from "../store";
 import type { Item } from "../types";
 import { arr, esc, fmtDate, hex } from "../util";
+import { dropCutout } from "../upload";
 import { closeDialog, openDialog } from "./dialog";
 import { CLOSED, FIELDS, OPTS, known, missingOf, photosOf } from "./fields";
 
@@ -38,9 +39,10 @@ export function openItem(id: string) {
   const ps = photosOf(it), miss = new Set(missingOf(it)), title = it.name || it.type || "Naamloos stuk";
   openDialog(`<form class="c-item" data-edit="${esc(it.id)}">
   <div>
-    ${ps[0] ? `<img class="c-item__photo" id="big" src="${esc(ps[0])}" alt="Foto van ${esc(title)}">` : ""}
+    ${ps[0] ? `<img class="c-item__photo${it.cutout ? " c-item__photo--cut" : ""}" id="big" src="${esc(ps[0])}" alt="Foto van ${esc(title)}">` : ""}
     ${ps.length > 1 ? `<div class="c-item__thumbs">${ps.map((p, i) => `<button type="button" data-swap="${esc(p)}" aria-label="Foto ${i + 1} van ${ps.length}" aria-current="${i === 0}"><img src="${esc(p)}" alt=""></button>`).join("")}</div>` : ""}
-    <p class="c-item__file">Bestand: ${esc(arr(it.files ?? it.file).join(", "))}<br>Toegevoegd: ${esc(fmtDate(it.added))}</p>
+    <p class="c-item__file">Toegevoegd: ${esc(fmtDate(it.added))}</p>
+    ${it.cutout && S.canWrite ? `<button type="button" class="c-link-btn" data-uncut>Uitsnede slecht? Gebruik de gewone foto</button>` : ""}
   </div>
   <div>
     <h2 class="c-item__title">${esc(it.brand || "Merk onbekend")}</h2>
@@ -120,4 +122,13 @@ document.addEventListener("submit", async (e) => {
   }
   if (!Object.keys(patch).length) { status("Niets gewijzigd."); return; }
   try { await saveItem(it, patch); status("Opgeslagen."); } catch (err) { status(why(err)); }
+});
+
+document.addEventListener("click", async (e) => {
+  const b = (e.target as HTMLElement).closest("[data-uncut]");
+  const f = document.querySelector<HTMLFormElement>("[data-edit]");
+  if (!b || !f) return;
+  const it = S.items.find((i) => i.id === f.dataset.edit);
+  if (!it?.paths?.[0] || !it.cutout) return;
+  try { await dropCutout(it.id, it.paths[0]); openItem(it.id); } catch (err) { status(why(err)); }
 });

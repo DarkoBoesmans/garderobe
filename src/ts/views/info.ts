@@ -8,49 +8,50 @@ const $ = (id: string) => document.getElementById(id)!;
 export const info: View = {
   title: "Colofon",
   mount(el) {
-    const w = S.canWrite && !!S.db;
     el.innerHTML = `
 <section class="c-hero">
   <div><p class="c-hero__kicker">Privacy, gegevens en bronnen</p><h1 class="c-hero__title">Colo<em>fon.</em></h1></div>
-  <div><p class="c-hero__theme">Wat deze pagina bewaart, en hoe je het weer weghaalt.</p>
-  <p class="c-hero__dek">Laatst bijgewerkt op 19 oktober 2026.</p></div>
+  <div><p class="c-hero__theme">Wat deze site bewaart, en hoe je het weer weghaalt.</p>
+  <p class="c-hero__dek">Laatst bijgewerkt op 2 november 2026.</p></div>
 </section>
 <div class="c-prose">
   <section aria-labelledby="i1"><h2 id="i1">Wie en waarom</h2>
-    <p>Een privéproject van Darko voor Darko en Lana: een digitale kleerkast en een lookbook. Er is geen bedrijf achter, er wordt niets verkocht, er zijn geen advertenties, affiliate links of betalingen. Daarom zijn er geen algemene voorwaarden, geen retourbeleid en geen kosten, verborgen of niet.</p></section>
+    <p>Een niet-commercieel project van Darko Boesmans: een digitale kleerkast met maten en een lookbook, en een showcase van hoe zoiets veilig gebouwd wordt. Er wordt niets verkocht, er zijn geen advertenties, affiliate links of betalingen. Daarom zijn er geen algemene voorwaarden, geen retourbeleid en geen kosten.</p></section>
 
   <section aria-labelledby="i2"><h2 id="i2">Welke gegevens</h2>
     <ul>
-      <li>Foto's van kleding uit een map op Darko's pc, met wat erop te zien is (merk, kleur, maat, materiaal).</li>
-      <li>Lichaamsmaten die je zelf invult op de pagina Maten. Alles is optioneel.</li>
-      <li>Favorieten en verborgen stukken in het lookbook.</li>
+      <li>Je e-mailadres en een versleuteld wachtwoord, om in te loggen. De demo gebruikt geen e-mailadres.</li>
+      <li>Foto's van je kleding en wat je erover invult (merk, kleur, maat, materiaal).</li>
+      <li>Lichaamsmaten die je zelf invult. Alles is optioneel.</li>
+      <li>Favorieten, outfits en wanneer je iets droeg.</li>
     </ul>
-    <p>Niet bewaard: naam, e-mailadres, adres, betaalgegevens, locatie, gegevens van kinderen. Er zijn geen formulieren die zulke gegevens vragen en er worden geen e-mails of nieuwsbrieven verstuurd.</p></section>
+    <p>Foto's worden in je browser opnieuw gecodeerd voor ze worden opgeladen. Daardoor verdwijnt alle metadata, ook de GPS-locatie die een gsm in een foto stopt. Er worden geen gegevens van kinderen gevraagd en geen nieuwsbrieven verstuurd; je krijgt enkel mails om je account te bevestigen of je wachtwoord te herstellen.</p></section>
 
   <section aria-labelledby="i3"><h2 id="i3">Waar en wie het ziet</h2>
-    <p>De gegevens staan in de database van deze pagina op claude.ai. Alleen mensen met wie de pagina gedeeld is kunnen ze zien. Er draait geen automatische scan meer: stukken komen er enkel bij als Darko of Claude ze toevoegt. </p>
-    <p>Daarnaast staat er een openbare versie op GitHub Pages. Het lookbook is daar openbaar. De kleerkast en de maten staan er alleen versleuteld (AES-256, sleutel afgeleid van een wachtwoord dat niet op GitHub staat) en zijn enkel leesbaar na het intikken van dat wachtwoord. GitHub houdt als host technische gegevens bij, zoals IP-adressen in serverlogs.</p></section>
+    <p>De gegevens staan bij Supabase in Frankfurt (EU). Elke rij en elke foto is beveiligd met regels in de database zelf: je ziet alleen je eigen kast, of een kast die iemand uitdrukkelijk met je deelt. Foto's zijn privé en worden getoond via links die na een uur verlopen. De website zelf staat op GitHub Pages; GitHub houdt als host technische gegevens bij, zoals IP-adressen in serverlogs.</p>
+    <p>Demo-accounts zijn anoniem en worden na 24 uur met alles erop en eraan gewist.</p></section>
 
-  <section aria-labelledby="i4"><h2 id="i4">Cookies en tracking</h2>
-    <p>Deze pagina zet zelf geen cookies, gebruikt geen lokale opslag en heeft geen analytics, pixels, embeds of advertentiecode. Lettertypes en productfoto's worden mee geleverd met de pagina, dus bij het openen gaat er geen verzoek naar Google, Pinterest of een winkel. Ook GitHub Pages zet geen cookies. Een cookiebanner is daarom niet nodig. Claude.ai gebruikt zelf strikt noodzakelijke cookies om je ingelogd te houden; die vallen onder het beleid van Anthropic.</p></section>
+  <section aria-labelledby="i4"><h2 id="i4">Cookies en opslag</h2>
+    <p>Er zijn geen analytics, pixels, embeds of advertenties. Om je ingelogd te houden bewaart de site je sessie in de lokale opslag van je browser; dat is strikt noodzakelijk voor wat je vraagt en vraagt daarom geen toestemming. Uitloggen wist die sessie. Bij het eerste gebruik van "Achtergrond weghalen" haalt je browser het beeldmodel op bij IMG.LY (staticimgly.com); je foto's verlaten je toestel daarvoor niet.</p></section>
 
   <section aria-labelledby="i5"><h2 id="i5">Links naar winkels</h2>
-    <p>Een productlink opent de winkel pas als je erop klikt. Vanaf dan gelden de privacy- en cookieregels van die winkel. Prijzen zijn een momentopname van oktober 2026 en kunnen veranderd zijn. Yuanprijzen zijn omgerekend aan de middenkoers, zonder verzending, agentkosten, invoerrechten en btw.</p>
+    <p>Een productlink opent de winkel pas als je erop klikt. Vanaf dan gelden de privacy- en cookieregels van die winkel. Prijzen zijn een momentopname van oktober 2026. Yuanprijzen zijn omgerekend aan de middenkoers, zonder verzending, agentkosten, invoerrechten en btw.</p>
     <p><strong>Let op:</strong> huskyreps en 91sheep (Yupoo) verkopen namaak van bekende merken. Merknamen bij die stukken beschrijven wat het stuk nadoet, niet dat het echt is. De douane kan zulke pakjes in beslag nemen en vernietigen.</p></section>
 
-  <section aria-labelledby="i6"><h2 id="i6">Rechten op beeld en tekst</h2>
-    <p>Productfoto's en -namen zijn van de winkels en merken; ze staan hier als niet-commerciële inspiratie met een link naar de bron. Wil een winkel of merk een foto weg, dan kan dat via een issue op de GitHub-repository DarkoBoesmans/garderobe en gaat ze eruit. Lettertypes: Instrument Serif en Archivo, beide onder de SIL Open Font License. Je eigen kledingfoto's zijn van jou.</p></section>
+  <section aria-labelledby="i6"><h2 id="i6">Rechten en licentie</h2>
+    <p>Productfoto's en -namen zijn van de winkels en merken; ze staan hier als niet-commerciële inspiratie met een link naar de bron. Wil een winkel of merk een foto weg, dan kan dat via een issue op de GitHub-repository DarkoBoesmans/garderobe. De broncode is open onder de AGPL-3.0, net als de gebruikte achtergrondverwijderaar van IMG.LY. Lettertypes: Instrument Serif en Archivo (SIL Open Font License). Je eigen foto's blijven van jou.</p></section>
 
   <section aria-labelledby="i7"><h2 id="i7">Jouw gegevens: inzien en wissen</h2>
-    <p>Een stuk verwijder je via de knop "Verwijder stuk" in de detailweergave. Hier kun je alles in één keer downloaden of wissen. Wissen haalt stukken, vragen, maten, favorieten en foto's weg; de foto's in de map op de pc blijven staan.</p>
-    <div class="c-actions c-actions--start" id="iacts">
-      ${S.downloads ? `<button type="button" class="c-btn c-btn--ghost" data-export>Download mijn gegevens (JSON)</button>` : ""}
-      ${w ? `<button type="button" class="c-btn c-btn--danger" data-wipe>Wis alle gegevens</button>` : ""}
+    <p>Een stuk verwijder je in de detailweergave. Hier download je alles als JSON, wis je al je stukken, foto's en maten, of verwijder je je account volledig.</p>
+    ${S.uid ? `<div class="c-actions c-actions--start" id="iacts">
+      <button type="button" class="c-btn c-btn--ghost" data-export>Download mijn gegevens (JSON)</button>
+      ${S.canWrite ? `<button type="button" class="c-btn c-btn--danger" data-wipe="data">Wis mijn kast</button>
+      <button type="button" class="c-btn c-btn--danger" data-wipe="account">Verwijder mijn account</button>` : ""}
       <span class="c-actions__status" role="status" id="istat"></span>
-    </div></section>
+    </div>` : `<p><a href="./">Log in</a> om je gegevens te downloaden of te wissen.</p>`}</section>
 
   <section aria-labelledby="i8"><h2 id="i8">Toegankelijkheid</h2>
-    <p>Alles werkt met het toetsenbord (Tab, Enter, Escape), knoppen zeggen wat ze doen, foto's hebben een beschrijving en tekst haalt minstens contrast 4,5:1 in licht en donker thema. Iets dat niet werkt? Zeg het tegen Darko.</p></section>
+    <p>Alles werkt met het toetsenbord (Tab, Enter, Escape), knoppen zeggen wat ze doen, foto's hebben een beschrijving en tekst haalt minstens contrast 4,5:1 in licht en donker thema. Iets dat niet werkt? Meld het via een issue op GitHub.</p></section>
 </div>`;
   },
   update() {},
@@ -58,22 +59,22 @@ export const info: View = {
 
 document.addEventListener("click", async (e) => {
   const t = e.target as HTMLElement;
-  if (t.closest("[data-export]")) {
-    try { await exportAll(); $("istat").textContent = "Download klaar."; } catch { $("istat").textContent = "Downloaden lukte niet of je annuleerde."; }
-    return;
-  }
-  if (t.closest("[data-wipe]")) {
+  if (t.closest("[data-export]")) { exportAll(); $("istat").textContent = "Download gestart."; return; }
+  const w = t.closest<HTMLElement>("[data-wipe]");
+  if (w) {
+    const acc = w.dataset.wipe === "account";
     $("iacts").innerHTML = `<div class="c-confirm" role="alertdialog" aria-labelledby="wq">
-  <p id="wq">Alles wissen: ${S.items.length} stukken, alle vragen, maten, favorieten en foto's? Dit kan niet ongedaan worden.</p>
+  <p id="wq">${acc ? "Je account en" : "Alles in je kast:"} ${S.items.length} stukken, foto's, outfits en maten definitief wissen? Dit kan niet ongedaan worden.</p>
   <button type="button" class="c-btn c-btn--ghost" data-wipe-no>Nee, niets wissen</button>
-  <button type="button" class="c-btn c-btn--danger" data-wipe-yes>Ja, wis alles</button>
+  <button type="button" class="c-btn c-btn--danger" data-wipe-yes="${acc ? "account" : "data"}">Ja, ${acc ? "verwijder mijn account" : "wis alles"}</button>
   <span class="c-actions__status" role="status" id="istat"></span></div>`;
     (document.querySelector("[data-wipe-no]") as HTMLElement).focus();
     return;
   }
   if (t.closest("[data-wipe-no]")) { info.mount(document.getElementById("view")!); return; }
-  if (t.closest("[data-wipe-yes]")) {
+  const y = t.closest<HTMLElement>("[data-wipe-yes]");
+  if (y) {
     $("istat").textContent = "Bezig met wissen…";
-    try { await wipeAll(); $("istat").textContent = "Alles is gewist."; } catch (err) { $("istat").textContent = why(err); }
+    try { await wipeAll(y.dataset.wipeYes === "account"); $("istat").textContent = "Alles is gewist."; } catch (err) { $("istat").textContent = why(err); }
   }
 });

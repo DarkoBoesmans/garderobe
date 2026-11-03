@@ -54,3 +54,5 @@ img.c-card__img { object-fit: cover; aspect-ratio: 4 / 5; }
 .c-card:hover .c-card__img { transform: scale(1.035); }
 .c-tag { transition: background .2s, color .2s; }
 .c-tag:hover { background: var(--accent); border-color: var(--accent); color: var(--paper); }
+// Uitsnede op papier: het stuk ligt erop als in een flat-lay, met een zachte schaduw.
+img.c-card__img--cut { object-fit: contain; padding: 10%; filter: drop-shadow(0 10px 12px color-mix(in srgb, var(--ink) 22%, transparent)); }

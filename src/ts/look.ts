@@ -15,7 +15,7 @@ export function sprite(x: LookItem, cls = "c-card__img") {
   const [c, r, ratio] = S.look.sheets[x.sh]!;
   const col = x.k % c, row = Math.floor(x.k / c);
   const pos = `${c > 1 ? (col * 100) / (c - 1) : 0}% ${r > 1 ? (row * 100) / (r - 1) : 0}%`;
-  return `<span class="${cls}" role="img" aria-label="${esc(brand(x) + ": " + x.d)}" style="aspect-ratio:${ratio};background-image:url(sheets/${x.sh}.jpg);background-size:${c * 100}% ${r * 100}%;background-position:${pos}"></span>`;
+  return `<span class="${cls}" role="img" aria-label="${esc(brand(x) + ": " + x.d)}" style="aspect-ratio:${ratio};background-image:url(sheets/${S.person.book ?? S.person.key}/${x.sh}.jpg);background-size:${c * 100}% ${r * 100}%;background-position:${pos}"></span>`;
 }
 
 export function price(x: LookItem) {
@@ -26,7 +26,7 @@ export function price(x: LookItem) {
 /** null: geen maat voor dit hoofdstuk. "": nog niet gemeten. */
 export function mySize(x: LookItem): string | null {
   const kind = S.person.chapterMap[x.c]?.kind;
-  if (!kind || !(S.online || S.unlocked)) return null;
+  if (!kind) return null;
   const a = S.person.sizes.advice(S.body).find((r) => r[3] === kind);
   if (!a) return "";
   const fit = S.body.brandFit?.[brand(x)];

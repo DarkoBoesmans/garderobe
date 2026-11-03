@@ -33,3 +33,9 @@
 .c-confirm { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; width: 100%; padding: 12px; border: 1px solid var(--accent); }
 .c-confirm p { margin-right: auto; color: var(--accent); }
 .c-actions--start { justify-content: flex-start; border-top: 0; }
+.c-add { display: flex; flex-wrap: wrap; gap: 12px 20px; align-items: center; padding-block: 20px; border-bottom: 1px solid var(--line); }
+.c-add__pick { cursor: pointer; }
+.c-add__pick:focus-within { outline: 2px solid var(--accent); outline-offset: 3px; }
+.c-add__opt { display: inline-flex; gap: 8px; align-items: center; min-height: 44px; }
+.c-add__opt input { min-height: 0; width: 18px; height: 18px; accent-color: var(--accent); }
+.c-item__photo--cut { object-fit: contain; padding: 8%; aspect-ratio: 4 / 5; filter: drop-shadow(0 14px 16px color-mix(in srgb, var(--ink) 22%, transparent)); }

@@ -14,23 +14,23 @@ function sprite(look: Look, id: string, base: string, cls: string) {
   const x = look.items.find((i) => i.id === id)!;
   const [c, r, ratio] = look.sheets[x.sh]!;
   const pos = `${c > 1 ? ((x.k % c) * 100) / (c - 1) : 0}% ${r > 1 ? (Math.floor(x.k / c) * 100) / (r - 1) : 0}%`;
-  return `<span class="${cls}" role="img" aria-label="${esc(`${x.s}: ${x.d}`)}" style="aspect-ratio:${ratio};background-image:url(${base}/sheets/${x.sh}.jpg);background-size:${c * 100}% ${r * 100}%;background-position:${pos}"></span>`;
+  return `<span class="${cls}" role="img" aria-label="${esc(`${x.s}: ${x.d}`)}" style="aspect-ratio:${ratio};background-image:url(${base}/${x.sh}.jpg);background-size:${c * 100}% ${r * 100}%;background-position:${pos}"></span>`;
 }
 
 export function landing() {
   return COVERS.map((p) => {
     const look = JSON.parse(readFileSync(`data/${p.key}-lookbook.json`, "utf8")) as Look;
     const [hero, ...rest] = look.dirs[0]!.p;
-    return `<a class="c-cover" href="${p.key}/" data-person="${p.key}">
+    return `<a class="c-cover" href="app/" data-person="${p.key}">
   <span class="c-cover__mast"><span>Garderobe</span><span>${p.issue}</span></span>
-  ${sprite(look, hero!, p.key, "c-cover__hero")}
-  <span class="c-cover__inset">${rest.slice(0, 2).map((id) => sprite(look, id, p.key, "c-cover__thumb")).join("")}</span>
+  ${sprite(look, hero!, `app/sheets/${p.key}`, "c-cover__hero")}
+  <span class="c-cover__inset">${rest.slice(0, 2).map((id) => sprite(look, id, `app/sheets/${p.key}`, "c-cover__thumb")).join("")}</span>
   <span class="c-cover__lines">
     <span class="c-cover__name">${p.name}<em>.</em></span>
     <span class="c-cover__theme">${esc(p.theme)}</span>
     <span class="c-cover__facts">${look.items.length} stuks · ${new Set(look.items.map((i) => i.s)).size} winkels · ${look.dirs.length} looks</span>
   </span>
-  <span class="c-cover__cta">Open het lookbook</span>
+  <span class="c-cover__cta">Log in om te openen</span>
 </a>`;
   }).join("");
 }

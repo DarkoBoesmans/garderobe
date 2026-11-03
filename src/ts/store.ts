@@ -1,94 +1,102 @@
 // Alles wat de database leest of schrijft. Views roepen enkel deze functies aan.
 import { S, render } from "./state";
-import type { Item, Prefs, Question } from "./types";
+import { BUCKET, sb } from "./supa";
+import type { Item } from "./types";
 import { arr } from "./util";
 
-const now = () => new Date().toISOString();
 const LISTS = new Set(["colors", "style", "season"]);
 export const isList = (f: string) => LISTS.has(f);
 
-export async function connect() {
-  const c = window.claude;
-  if (!c) { S.canWrite = false; S.loaded = true; render(); return; }
-  const [db, user, assets, downloads] = await Promise.all([c.use("db"), c.use("user"), c.use("assets"), c.use("downloads")]);
-  S.db = db; S.assets = assets; S.downloads = downloads;
-  if (!db) { S.loaded = true; render(); return; }
-  if (user && (await user.can("data.write")) === false) S.canWrite = false;
-  const docs = <T>(s: { docs: { id: string; data(): unknown }[] }) => s.docs.map((d) => ({ id: d.id, ...(d.data() as object) }) as T);
-  db.collection("items").onSnapshot((s) => { S.items = docs<Item>(s); S.loaded = true; render(); }, () => {});
-  db.collection("questions").onSnapshot((s) => { S.qs = docs<Question>(s); render(); }, () => {});
-  db.doc("meta/body").onSnapshot((s) => { S.body = s.exists ? s.data()! : {}; render(); }, () => {});
-  db.doc("meta/state").onSnapshot((s) => { S.meta = s.exists ? s.data()! : null; render(); }, () => {});
-  db.doc("meta/lookbook").onSnapshot((s) => {
-    const d = s.exists ? (s.data() as Partial<Prefs>) : {};
-    S.prefs = { fav: d.fav ?? [], hidden: d.hidden ?? [] };
-    render();
-  }, () => {});
+interface Row { id: string; data: Record<string, unknown>; photo_path: string | null; cutout_path: string | null }
+/** Velden die de app zelf toevoegt en nooit in `data` horen. */
+const LOCAL = ["id", "photo", "photos", "paths", "cutout"];
+
+/** Laadt kast, maten en voorkeuren van de ingelogde gebruiker. Foto's via signed URL's van 1 uur. */
+export async function load() {
+  const [it, body, prefs] = await Promise.all([
+    sb.from("items").select("id,data,photo_path,cutout_path").eq("user_id", S.uid).eq("archived", false).order("created_at"),
+    sb.from("bodies").select("data").eq("user_id", S.uid).maybeSingle(),
+    sb.from("prefs").select("fav,hidden").eq("user_id", S.uid).maybeSingle(),
+  ]);
+  if (it.error) throw it.error;
+  const rows = it.data as Row[];
+  const paths = rows.flatMap((r) => [r.cutout_path, r.photo_path]).filter((p): p is string => !!p);
+  const url = new Map<string, string>();
+  if (paths.length) {
+    const { data } = await sb.storage.from(BUCKET).createSignedUrls(paths, 3600);
+    data?.forEach((d) => d.path && d.signedUrl && url.set(d.path, d.signedUrl));
+  }
+  S.items = rows.map((r) => {
+    const p = [r.cutout_path, r.photo_path].filter((x): x is string => !!x);
+    return { ...r.data, id: r.id, paths: p, cutout: r.cutout_path ? url.get(r.cutout_path) : undefined, photos: p.map((x) => url.get(x)!).filter(Boolean), photo: url.get(p[0] ?? "") } as Item;
+  });
+  S.body = (body.data?.data as typeof S.body) ?? {};
+  S.prefs = { fav: prefs.data?.fav ?? [], hidden: prefs.data?.hidden ?? [] };
+  S.loaded = true;
+  render();
 }
 
-/** Foutmelding in gewone taal. */
-export const why = (e: unknown) =>
-  (e as { code?: string })?.code === "invalid_argument" || (e as { code?: string })?.code === "permission_denied"
-    ? "Je kunt deze pagina alleen bekijken, niet wijzigen." : "Dat lukte niet. Probeer het opnieuw.";
+const dataOf = (it: Item) => Object.fromEntries(Object.entries(it).filter(([k]) => !LOCAL.includes(k)));
 
-export async function togglePref(key: keyof Prefs, id: string) {
+/** Foutmelding in gewone taal. */
+export const why = (e: unknown) => {
+  const m = String((e as { message?: string })?.message ?? "");
+  return /row-level security|permission/i.test(m) ? "Je kunt deze kast alleen bekijken, niet wijzigen." : "Dat lukte niet. Controleer je verbinding en probeer opnieuw.";
+};
+
+export async function togglePref(key: "fav" | "hidden", id: string) {
   const cur = new Set(S.prefs[key]);
   cur.has(id) ? cur.delete(id) : cur.add(id);
   S.prefs = { ...S.prefs, [key]: [...cur] };
   render();
-  await S.db?.doc("meta/lookbook").set({ ...S.prefs });
+  await sb.from("prefs").upsert({ user_id: S.uid, ...S.prefs });
 }
 
 export async function saveItem(it: Item, patch: Record<string, unknown>) {
   patch.missing = arr(it.missing).filter((k) => !(k in patch) || patch[k] === "" || (Array.isArray(patch[k]) && !(patch[k] as unknown[]).length));
-  patch.editedAt = now();
-  await S.db!.doc("items/" + it.id).update(patch);
-  for (const q of S.qs.filter((q) => q.itemId === it.id && q.status === "open" && q.field in patch)) {
-    const v = patch[q.field];
-    await S.db!.doc("questions/" + q.id).update({ status: "answered", answer: Array.isArray(v) ? v.join(", ") : v, answeredAt: now(), via: "edit" });
-  }
+  const { error } = await sb.from("items").update({ data: { ...dataOf(it), ...patch } }).eq("id", it.id);
+  if (error) throw error;
+  Object.assign(it, patch);
+  render();
 }
 
-export async function answer(q: Question, val: string | null) {
-  await S.db!.doc("questions/" + q.id).update({ status: val == null ? "skipped" : "answered", answer: val ?? "", answeredAt: now() });
-  const it = S.items.find((i) => i.id === q.itemId);
-  if (val != null && it) {
-    await S.db!.doc("items/" + it.id).update({ [q.field]: isList(q.field) ? arr(val) : val, missing: arr(it.missing).filter((k) => k !== q.field) });
-  }
-}
-
-const blobId = (url: string) => url.match(/\/_blob\/([0-9a-f]{32})/)?.[1];
-
-/** Verwijdert een stuk, zijn vragen en zijn foto's. */
+/** Verwijdert een stuk en zijn foto's. */
 export async function deleteItem(it: Item) {
-  const db = S.db!;
-  for (const q of S.qs.filter((q) => q.itemId === it.id)) await db.doc("questions/" + q.id).delete();
-  await db.doc("items/" + it.id).delete();
-  for (const u of new Set([it.photo ?? "", ...(it.photos ?? [])])) {
-    const id = blobId(u);
-    if (id && S.assets) await S.assets.delete(id).catch(() => {});
-  }
+  const { error } = await sb.from("items").delete().eq("id", it.id);
+  if (error) throw error;
+  if (it.paths?.length) await sb.storage.from(BUCKET).remove(it.paths as string[]);
+  S.items = S.items.filter((x) => x.id !== it.id);
+  render();
 }
 
 export async function saveBody(d: Record<string, unknown>) {
-  await S.db!.doc("meta/body").set({ ...d, measuredAt: now() });
+  const { error } = await sb.from("bodies").upsert({ user_id: S.uid, data: { ...d, measuredAt: new Date().toISOString() } });
+  if (error) throw error;
+  S.body = d;
+  render();
 }
 
-/** Alle gegevens van deze pagina als één JSON-bestand (recht op inzage). */
-export async function exportAll() {
-  const data = JSON.stringify({ exported: now(), items: S.items, questions: S.qs, body: S.body, lookbook: S.prefs, scan: S.meta }, null, 2);
-  if (!S.downloads) throw new Error("no downloads");
-  await S.downloads.save({ filename: `garderobe-${S.person.key}.json`, data });
+/** Alle gegevens als één JSON-bestand (recht op inzage). */
+export function exportAll() {
+  const data = JSON.stringify({ exported: new Date().toISOString(), items: S.items.map(dataOf), body: S.body, lookbook: S.prefs }, null, 2);
+  const a = Object.assign(document.createElement("a"), { href: URL.createObjectURL(new Blob([data], { type: "application/json" })), download: `garderobe-${S.person.key}.json` });
+  a.click();
+  setTimeout(() => URL.revokeObjectURL(a.href), 1000);
 }
 
-/** Wist alles: stukken, vragen, maten, favorieten, scanstatus en alle foto's (recht op vergetelheid). */
-export async function wipeAll() {
-  const db = S.db!;
-  for (const q of S.qs) await db.doc("questions/" + q.id).delete();
-  for (const it of S.items) await db.doc("items/" + it.id).delete();
-  for (const p of ["meta/body", "meta/lookbook", "meta/state"]) await db.doc(p).delete();
-  if (S.assets) {
-    const { assets } = await S.assets.list();
-    for (const a of assets) await S.assets.delete(a.id).catch(() => {});
+/** Wist alles van deze gebruiker: rijen, foto's en het account zelf (recht op vergetelheid). */
+export async function wipeAll(account: boolean) {
+  for (const t of ["wears", "outfits", "items", "bodies", "prefs"]) {
+    const { error } = await sb.from(t).delete().eq("user_id", S.uid);
+    if (error) throw error;
   }
+  const { data } = await sb.storage.from(BUCKET).list(S.uid, { limit: 1000 });
+  if (data?.length) await sb.storage.from(BUCKET).remove(data.map((f) => `${S.uid}/${f.name}`));
+  if (account) {
+    const { error } = await sb.rpc("delete_my_account");
+    if (error) throw error;
+    await sb.auth.signOut();
+    location.reload();
+  }
+  await load();
 }

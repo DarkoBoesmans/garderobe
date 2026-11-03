@@ -4,11 +4,10 @@
   "description": "Lookbook, kleerkast en maten voor Darko en Lana",
   "scripts": {
     "build": "node scripts/build.ts",
-    "check": "tsc && node scripts/check.ts",
-    "encrypt": "node scripts/encrypt.ts"
+    "check": "tsc && node scripts/check.ts"
   },
   "author": "",
-  "license": "UNLICENSED",
+  "license": "AGPL-3.0-only",
   "devDependencies": {
     "@fontsource-variable/archivo": "^5.2.8",
     "@fontsource/instrument-serif": "^5.2.8",
@@ -18,5 +17,9 @@
     "typescript": "^5.9.3"
   },
   "private": true,
-  "type": "module"
+  "type": "module",
+  "dependencies": {
+    "@imgly/background-removal": "^1.7.0",
+    "@supabase/supabase-js": "^2.118.0"
+  }
 }
