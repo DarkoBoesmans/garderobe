@@ -13,3 +13,9 @@ Kernregels:
 Iemand uitnodigen: `insert into private.allowed_emails values ('naam@voorbeeld.be');`
 
 Beveiligingstest: `TEST_A=… TEST_B=… TEST_PASSWORD=… node supabase/tests/security.mjs`
+
+## Demo en beheer
+
+- `migrations/20261103_demo.sql`: demo-kast van Jules (`private.demo_items`), `start_demo()` voor anonieme bezoekers, limieten (40 stukken, 30 uploads), `demo_expired()` en het uurlijkse opruimschema. De edge function staat in `functions/demo-cleanup`.
+- `migrations/20261103_admin.sql`: `allowed_emails.person` bepaalt welke garderobe een nieuwe gebruiker krijgt. `admin_overview()`, `admin_invite()` en `admin_uninvite()` werken alleen voor het bevestigde account van darkoboesmans@gmail.com; de app toont `#admin` (Beheer) enkel aan dat account.
+- Anonieme logins moeten aanstaan in het dashboard (Authentication → Sign In / Providers).
