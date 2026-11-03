@@ -22,6 +22,13 @@ export const darko: Person = {
     "T-shirts": { cats: ["T-shirts & polo's"], kind: "top" },
     "Accessoires": { cats: ["Accessoires"] },
   },
+  slots: [
+    ["Laag", ["Jassen"]],
+    ["Top", ["Truien & cardigans", "Hemden & overshirts", "T-shirts & polo's", "Sweaters & hoodies", "Sport & outdoor"]],
+    ["Onder", ["Broeken", "Jeans", "Shorts"]],
+    ["Schoenen", ["Schoenen", "Sneakers"]],
+    ["Extra", ["Accessoires", "Overig"]],
+  ],
   sizes: men,
 };
 
@@ -43,6 +50,13 @@ export const lana: Person = {
     "Schoenen": { cats: ["Schoenen", "Sneakers"], kind: "schoen" },
     "Tassen & accessoires": { cats: ["Tassen", "Accessoires"] },
   },
+  slots: [
+    ["Laag", ["Jassen & blazers"]],
+    ["Top", ["Truien & cardigans", "Blouses & hemden", "T-shirts & tops", "Jurken", "Sport & outdoor"]],
+    ["Onder", ["Broeken", "Jeans", "Rokken"]],
+    ["Schoenen", ["Schoenen", "Sneakers"]],
+    ["Extra", ["Tassen", "Accessoires", "Overig"]],
+  ],
   sizes: women,
 };
 

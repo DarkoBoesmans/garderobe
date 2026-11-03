@@ -4,7 +4,7 @@ import type { Item } from "../types";
 import { ROMAN, arr, esc, hex } from "../util";
 import { catRank, missingOf, photosOf } from "./fields";
 import { openItem } from "./item";
-import { addPhotos } from "../upload";
+import { addPhotos, cutoutAll } from "../upload";
 import { importVault } from "../vault";
 import { why } from "../store";
 import type { View } from "./shell";
@@ -51,6 +51,7 @@ export const kast: View = {
 <form class="c-add" id="kadd">
   <label class="c-btn c-add__pick"><input type="file" id="kfiles" accept="image/*" multiple class="u-sr-only">Stuk toevoegen</label>
   <label class="c-add__opt"><input type="checkbox" id="kbg" checked> Achtergrond weghalen</label>
+  <button type="button" class="c-link-btn" id="kcutall" hidden></button>
   <span class="c-actions__status" id="kstat" role="status"></span>
 </form>
 <div id="kimport"></div>
@@ -83,6 +84,9 @@ export const kast: View = {
       <label class="c-lock__label" for="kimppw">Oud wachtwoord</label><div class="c-lock__row"><input id="kimppw" type="password" autocomplete="off" required><button class="c-btn">Importeer</button></div>
       <p class="c-lock__msg" id="kimpmsg" role="status"></p></form>`;
     if (!showImport) $("kimport").innerHTML = "";
+    const bare = S.items.filter((i) => !i.cutout && i.photo).length, ca = $("kcutall");
+    ca.hidden = !bare || !S.canWrite;
+    if (!ca.hasAttribute("disabled")) ca.textContent = `Achtergrond weghalen bij ${bare} ${bare === 1 ? "stuk" : "stukken"}`;
     const L = filtered();
     $("kcount").textContent = `${L.length} van ${S.items.length} stuks`;
     const book = $("kbook");
@@ -128,4 +132,13 @@ document.addEventListener("submit", async (e) => {
   const msg = $("kimpmsg");
   try { await importVault(($("kimppw") as HTMLInputElement).value, (t) => (msg.textContent = t)); }
   catch { msg.textContent = "Importeren lukte niet. Klopt het wachtwoord?"; }
+});
+
+document.addEventListener("click", async (e) => {
+  const b = (e.target as HTMLElement).closest<HTMLButtonElement>("#kcutall");
+  if (!b) return;
+  b.disabled = true;
+  try { const n = await cutoutAll((t) => ($("kstat").textContent = t)); $("kstat").textContent = `${n} uitsneden gemaakt. Lukte er een niet goed, open het stuk en kies de gewone foto.`; }
+  catch (err) { $("kstat").textContent = why(err); }
+  finally { b.disabled = false; }
 });

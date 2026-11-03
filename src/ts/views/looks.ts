@@ -3,7 +3,8 @@ import { byId, brand, euro, haveOf, itemName, mySize, sprite } from "../look";
 import { S } from "../state";
 import type { LookItem } from "../types";
 import { RATE, esc, eur, two } from "../util";
-import { openDialog } from "./dialog";
+import { closeDialog, openDialog } from "./dialog";
+import { fromLook } from "./outfits";
 
 const pieces = (i: number) => S.look.dirs[i]!.p.map(byId).filter((x): x is LookItem => !!x);
 const pal = (c: string[]) => `<div class="c-look__pal" aria-hidden="true">${c.map((h) => `<span style="background:${h}"></span>`).join("")}</div>`;
@@ -48,6 +49,7 @@ export function openOutfit(i: number) {
     </dl>
     ${yuan ? `<p class="c-outfit__vibe">Yuanprijzen zijn omgerekend aan de middenkoers, zonder verzending, agentkosten, invoerrechten en btw.</p>` : ""}
     <div class="c-outfit__nav">
+      <button type="button" class="c-btn" data-mylook="${i}">Maak deze look met wat ik heb</button>
       <button type="button" class="c-btn c-btn--ghost" data-look="${(i + n - 1) % n}">Vorige look</button>
       <button type="button" class="c-btn c-btn--ghost" data-look="${(i + 1) % n}">Volgende look</button>
     </div>
@@ -59,4 +61,11 @@ export function openOutfit(i: number) {
 document.addEventListener("click", (e) => {
   const b = (e.target as HTMLElement).closest<HTMLElement>("[data-look]");
   if (b) openOutfit(+b.dataset.look!);
+});
+
+document.addEventListener("click", (e) => {
+  const b = (e.target as HTMLElement).closest<HTMLElement>("[data-mylook]");
+  if (!b) return;
+  closeDialog();
+  fromLook(+b.dataset.mylook!);
 });

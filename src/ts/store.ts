@@ -1,7 +1,7 @@
 // Alles wat de database leest of schrijft. Views roepen enkel deze functies aan.
 import { S, render } from "./state";
 import { BUCKET, sb } from "./supa";
-import type { Item } from "./types";
+import type { Item, Outfit } from "./types";
 import { arr } from "./util";
 
 const LISTS = new Set(["colors", "style", "season"]);
@@ -13,10 +13,12 @@ const LOCAL = ["id", "photo", "photos", "paths", "cutout"];
 
 /** Laadt kast, maten en voorkeuren van de ingelogde gebruiker. Foto's via signed URL's van 1 uur. */
 export async function load() {
-  const [it, body, prefs] = await Promise.all([
+  const [it, body, prefs, outfits, wears] = await Promise.all([
     sb.from("items").select("id,data,photo_path,cutout_path").eq("user_id", S.uid).eq("archived", false).order("created_at"),
     sb.from("bodies").select("data").eq("user_id", S.uid).maybeSingle(),
     sb.from("prefs").select("fav,hidden").eq("user_id", S.uid).maybeSingle(),
+    sb.from("outfits").select("id,name,slots").eq("user_id", S.uid).order("created_at", { ascending: false }),
+    sb.from("wears").select("item_id,worn_on").eq("user_id", S.uid).order("worn_on", { ascending: false }).limit(1000),
   ]);
   if (it.error) throw it.error;
   const rows = it.data as Row[];
@@ -32,6 +34,9 @@ export async function load() {
   });
   S.body = (body.data?.data as typeof S.body) ?? {};
   S.prefs = { fav: prefs.data?.fav ?? [], hidden: prefs.data?.hidden ?? [] };
+  S.outfits = (outfits.data ?? []) as Outfit[];
+  S.lastWorn = {};
+  for (const w of wears.data ?? []) S.lastWorn[w.item_id] ??= w.worn_on;
   S.loaded = true;
   render();
 }
@@ -99,4 +104,28 @@ export async function wipeAll(account: boolean) {
     location.reload();
   }
   await load();
+}
+
+export async function saveOutfit(name: string, slots: Record<string, string>) {
+  const { data, error } = await sb.from("outfits").insert({ name, slots }).select("id,name,slots").single();
+  if (error) throw error;
+  S.outfits = [data as Outfit, ...S.outfits];
+  render();
+  return data as Outfit;
+}
+
+export async function deleteOutfit(id: string) {
+  const { error } = await sb.from("outfits").delete().eq("id", id);
+  if (error) throw error;
+  S.outfits = S.outfits.filter((o) => o.id !== id);
+  render();
+}
+
+/** "Vandaag gedragen": één rij per stuk, zodat laatst gedragen en prijs per keer kloppen. */
+export async function wearToday(itemIds: string[], outfitId?: string) {
+  const today = new Date().toISOString().slice(0, 10);
+  const { error } = await sb.from("wears").insert(itemIds.map((item_id) => ({ item_id, outfit_id: outfitId ?? null, worn_on: today })));
+  if (error) throw error;
+  for (const id of itemIds) S.lastWorn[id] = today;
+  render();
 }

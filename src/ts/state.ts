@@ -1,5 +1,5 @@
 // Eén plek voor de toestand van de pagina. Views lezen hieruit en roepen render() aan.
-import type { Body, Item, Lookbook, Person, Prefs } from "./types";
+import type { Body, Item, Lookbook, Outfit, Person, Prefs } from "./types";
 
 export const S = {
   person: undefined as unknown as Person,
@@ -9,6 +9,9 @@ export const S = {
   items: [] as Item[],
   body: {} as Body,
   prefs: { fav: [], hidden: [] } as Prefs,
+  outfits: [] as Outfit[],
+  /** Laatst gedragen datum (JJJJ-MM-DD) per stuk. */
+  lastWorn: {} as Record<string, string>,
   canWrite: true,
   /** false tot de database antwoordt; dan tonen we "laden" in plaats van "leeg". */
   loaded: false,

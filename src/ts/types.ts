@@ -67,5 +67,8 @@ export interface Person {
   categories: string[];
   /** lookbookhoofdstuk naar kleerkastcategorieën en maatsoort */
   chapterMap: Record<string, { cats: string[]; kind?: string }>;
+  /** Vakken op het outfitbord, met de kleerkastcategorieën die erin passen. */
+  slots: [string, string[]][];
   sizes: SizeSystem;
 }
+export interface Outfit { id: string; name: string; slots: Record<string, string> }

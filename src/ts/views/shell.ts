@@ -5,13 +5,14 @@ import { info } from "./info";
 import { kast } from "./kast";
 import { lookbook } from "./lookbook";
 import { maten } from "./maten";
+import { outfits } from "./outfits";
 import { sb } from "../supa";
 
 export interface View { title: string; mount(el: HTMLElement): void; update(): void }
 
-const ROUTES: Record<string, View> = { "#lookbook": lookbook, "#kast": kast, "#maten": maten, "#info": info };
-const NAV: [string, string][] = [["#lookbook", "Lookbook"], ["#kast", "Kleerkast"], ["#maten", "Maten"], ["#info", "Colofon"]];
-let current: View = lookbook;
+const ROUTES: Record<string, View> = { "#kast": kast, "#outfits": outfits, "#lookbook": lookbook, "#maten": maten, "#info": info };
+const NAV: [string, string][] = [["#kast", "Kast"], ["#outfits", "Outfits"], ["#lookbook", "Lookbook"], ["#maten", "Maten"], ["#info", "Colofon"]];
+let current: View = kast;
 
 export function startShell(app: HTMLElement) {
   const p = S.person;
@@ -39,7 +40,7 @@ export function startShell(app: HTMLElement) {
 }
 
 function go(moveFocus: boolean) {
-  const hash = location.hash in ROUTES ? location.hash : "#lookbook";
+  const hash = location.hash in ROUTES ? location.hash : "#kast";
   current = ROUTES[hash]!;
   document.querySelectorAll(".c-masthead__link").forEach((a) => a.toggleAttribute("aria-current", a.getAttribute("href") === hash));
   document.querySelectorAll(".c-masthead__link[aria-current]").forEach((a) => a.setAttribute("aria-current", "page"));

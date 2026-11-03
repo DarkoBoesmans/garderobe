@@ -69,3 +69,21 @@ export async function dropCutout(id: string, path: string) {
   await sb.storage.from(BUCKET).remove([path]);
   await load();
 }
+
+/** Uitsneden maken voor stukken die er nog geen hebben (bv. na de import). Slaat mislukte over. */
+export async function cutoutAll(progress: (t: string) => void) {
+  const todo = S.items.filter((i) => !i.cutout && i.photo);
+  let done = 0;
+  for (const [n, it] of todo.entries()) {
+    progress(`Stuk ${n + 1} van ${todo.length}…`);
+    const cut = await cutout(await (await fetch(it.photo!)).blob(), (t) => progress(`Stuk ${n + 1} van ${todo.length}: ${t}`)).catch(() => null);
+    if (!cut) continue;
+    const path = `${S.uid}/${it.id}-c.webp`;
+    await put(path, cut);
+    const { error } = await sb.from("items").update({ cutout_path: path }).eq("id", it.id);
+    if (error) throw error;
+    done++;
+  }
+  await load();
+  return done;
+}
