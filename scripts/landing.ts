@@ -16,7 +16,7 @@ function sprite(look: Look, id: string, base: string, cls: string) {
 
 /** Een uitsnede uit de demo-kast als echte <img>, met vaste afmetingen tegen verspringen. */
 const cut = (f: string, w: number, h: number, alt: string, cls = "", eager = false) =>
-  `<img class="${cls}" src="app/demo/${f}.webp" width="${w}" height="${h}" alt="${esc(alt)}"${eager ? ' fetchpriority="high"' : ' loading="lazy"'} decoding="async">`;
+  `<img class="${cls}" src="app/demo/${f}-s.webp" width="${w}" height="${h}" alt="${esc(alt)}"${eager ? ' fetchpriority="high"' : ' loading="lazy"'} decoding="async">`;
 
 function cover(p: { key: string; name: string; issue: string; theme: string; href: string; cta: string; facts: string }, art: string, inset: string) {
   return `<a class="c-cover" href="${p.href}" data-person="${p.key === "jules" ? "darko" : p.key}">
@@ -58,7 +58,7 @@ export function landing(darkoCount: number, lanaCount: number) {
   return `
 <a class="c-skip" href="#main">Naar de inhoud</a>
 <header class="c-front-nav o-wrap">
-  <a class="c-front-nav__mark" href="./" aria-label="Garderobe, voorpagina">G<em>.</em></a>
+  <a class="c-front-nav__mark" href="./" aria-label="G. Garderobe, naar de voorpagina">G<em>.</em></a>
   <nav class="c-front-nav__menu" aria-label="Voorpagina">
     <a href="#kasten"><small>01</small>Kasten</a>
     <a href="#werking"><small>02</small>Werking</a>

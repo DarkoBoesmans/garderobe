@@ -65,7 +65,7 @@ writeFileSync("dist/app/index.html", doc("Inloggen · Garderobe", `<div id="app"
 writeFileSync("dist/.nojekyll", "");
 const count = (k: string) => (JSON.parse(readFileSync(`data/${k}-lookbook.json`, "utf8")) as { items: unknown[] }).items.length;
 writeFileSync("dist/index.html", doc("Garderobe · je kleerkast, uitgeknipt", landing(count("darko"), count("lana")),
-  "", `<link rel="preload" href="app/demo/denim-c.webp" as="image" fetchpriority="high">`).replace("<body>", `<body data-person="lana">`));
+  "", `<link rel="preload" href="app/demo/denim-c-s.webp" as="image" fetchpriority="high">`).replace("<body>", `<body data-person="lana">`));
 cpSync("static/og.png", "dist/og.png");
 writeFileSync("dist/robots.txt", `User-agent: *\nDisallow: /garderobe/app/\nSitemap: ${SITE}sitemap.xml\n`);
 writeFileSync("dist/sitemap.xml", `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"><url><loc>${SITE}</loc></url></urlset>\n`);
