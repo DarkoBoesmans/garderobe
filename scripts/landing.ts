@@ -80,11 +80,10 @@ ${top("")}
   </section>
 
   <section class="c-labels o-wrap" aria-labelledby="h3">
-    <h2 class="c-sec-title" id="h3">Drie kasten</h2>
+    <h2 class="c-sec-title" id="h3">Probeer het of log in</h2>
     <div class="c-labels__row">
-      ${label("Jules", "Demo · verzonnen", ["14 stuks, alles tweedehands", "Open voor iedereen, zonder account", "Na 24 uur gewist"], "app/#demo", "Open de demo", true)}
-      ${label("Darko", "Privé", ["Eigen kast en een privé lookbook", "Alleen na inloggen", "Op uitnodiging"], "app/", "Inloggen")}
-      ${label("Lana", "Privé", ["Eigen kast en een privé lookbook", "Alleen na inloggen", "Op uitnodiging"], "app/", "Inloggen")}
+      ${label("Demo-kast", "Verzonnen · open voor iedereen", ["14 stuks vintage streetwear", "Geen account nodig", "Alles wat je toevoegt wordt na 24 uur gewist"], "app/#demo", "Open de demo", true)}
+      ${label("Je eigen kast", "Privé · op uitnodiging", ["Alleen jij ziet je stukken, maten en outfits", "Inloggen met e-mail en wachtwoord"], "app/", "Inloggen")}
     </div>
   </section>
 </main>

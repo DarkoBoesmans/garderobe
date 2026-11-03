@@ -8,7 +8,7 @@ export const ADMIN = "darkoboesmans@gmail.com";
 interface Invite { email: string; person: string; joined: string | null; last: string | null }
 interface Overview { invites: Invite[]; demos: number; items: number }
 
-const PERSONS: [string, string][] = [["demo", "Lege kast (stijl van de demo)"], ["darko", "Darko"], ["lana", "Lana"]];
+const PERSONS: [string, string][] = [["demo", "Lege kast (stijl van de demo)"], ["darko", "Heren, heritage"], ["lana", "Dames, dark academia"]];
 const st = { data: null as Overview | null, error: "", confirm: "" };
 const $ = (id: string) => document.getElementById(id);
 
@@ -35,11 +35,13 @@ export const admin: View = {
 <section class="c-hero">
   <div><p class="c-hero__kicker">Alleen voor jou</p><h1 class="c-hero__title">Beheer</h1></div>
   <div><p class="c-hero__theme">Wie mag binnen.</p>
-  <p class="c-hero__dek">Alleen uitgenodigde e-mailadressen kunnen een account maken. Wie je uitnodigt, krijgt een eigen, lege kast; kies "Darko" of "Lana" alleen voor jullie twee. Een uitnodiging intrekken wist geen bestaand account.</p></div>
+  <p class="c-hero__dek">Alleen uitgenodigde e-mailadressen kunnen een account maken. Wie je uitnodigt, krijgt een eigen, lege kast; kies een bestaande stijl alleen voor jezelf en je vriendin. Een uitnodiging intrekken wist geen bestaand account.</p></div>
 </section>
 <form class="c-lock c-admin__form" id="ainv" novalidate>
   <label class="c-lock__label" for="aemail">E-mailadres</label>
   <input id="aemail" type="email" autocomplete="off" required>
+  <label class="c-lock__label" for="aname">Voornaam (verschijnt bovenaan de kast)</label>
+  <input id="aname" maxlength="40" autocomplete="off">
   <label class="c-lock__label" for="aperson">Garderobe</label>
   <select id="aperson">${PERSONS.map(([v, l]) => `<option value="${v}">${esc(l)}</option>`).join("")}</select>
   <button class="c-btn">Uitnodigen</button>
@@ -65,7 +67,7 @@ document.addEventListener("submit", async (e) => {
   e.preventDefault();
   const email = ($("aemail") as HTMLInputElement).value.trim(), person = ($("aperson") as HTMLSelectElement).value, msg = $("amsg")!;
   if (!/^\S+@\S+\.\S+$/.test(email)) { msg.textContent = "Vul een geldig e-mailadres in."; return; }
-  const r = await sb.rpc("admin_invite", { p_email: email, p_person: person });
+  const r = await sb.rpc("admin_invite", { p_email: email, p_person: person, p_name: ($("aname") as HTMLInputElement).value.trim() });
   if (r.error) { msg.textContent = "Uitnodigen lukte niet."; return; }
   ($("aemail") as HTMLInputElement).value = "";
   msg.textContent = `${email} is uitgenodigd. Stuur zelf de link naar de site; die persoon maakt daar een account met dit adres.`;

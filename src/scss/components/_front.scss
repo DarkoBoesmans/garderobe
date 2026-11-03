@@ -64,7 +64,7 @@
 
 // Drie kasten als geweven labels.
 .c-labels { padding-block: clamp(40px, 6vw, 80px); border-top: 1px solid var(--ink); }
-.c-labels__row { display: grid; gap: 16px; margin-top: 28px; @include md { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+.c-labels__row { display: grid; gap: 16px; margin-top: 28px; @include md { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 .c-label { display: grid; gap: 14px; align-content: start; padding: 20px; border: 1px solid var(--ink); min-width: 0; }
 .c-label__kind { @include label; font-size: 11px; color: var(--accent); }
 .c-label__name { font: 500 clamp(40px, 5vw, 64px)/1 var(--mono); letter-spacing: -.05em; text-transform: uppercase; }

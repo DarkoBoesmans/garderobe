@@ -56,8 +56,10 @@ async function boot() {
   }
   S.uid = session.user.id;
   S.email = session.user.email ?? "";
-  const { data: prof } = await sb.from("profiles").select("person").eq("id", S.uid).maybeSingle();
-  S.person = PEOPLE[(prof?.person as keyof typeof PEOPLE) ?? "demo"] ?? PEOPLE.demo;
+  const { data: prof } = await sb.from("profiles").select("person,name").eq("id", S.uid).maybeSingle();
+  // Namen staan in de database, niet in de code: de publieke bundel noemt niemand.
+  const base = PEOPLE[(prof?.person as keyof typeof PEOPLE) ?? "demo"] ?? PEOPLE.demo;
+  S.person = { ...base, name: prof?.name || base.name || "jou" };
   await loadLook(S.person.book ?? S.person.key);
   startShell(app);
   load().catch(() => { S.loaded = true; render(); });

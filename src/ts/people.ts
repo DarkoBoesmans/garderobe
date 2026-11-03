@@ -5,12 +5,12 @@ import { women } from "./sizes/women";
 
 export const darko: Person = {
   key: "darko",
-  name: "Darko",
+  name: "",
   issue: "N° 01",
   season: "Herfst / Winter 2026",
   theme: "Warme heritage casual",
   dek: "Tabak, olijf, camel en ecru. Wijde broeken, truien met textuur en één opvallende laag, afgewerkt met een sneaker die het verhaal draagt.",
-  folder: "C:\\Users\\Darko\\Pictures\\Wardrobe",
+  folder: "",
   categories: ["Jassen", "Truien & cardigans", "Hemden & overshirts", "T-shirts & polo's", "Sweaters & hoodies", "Broeken", "Jeans", "Shorts", "Schoenen", "Sneakers", "Accessoires", "Sport & outdoor", "Overig"],
   chapterMap: {
     "Jassen": { cats: ["Jassen"], kind: "jas" },
@@ -34,12 +34,12 @@ export const darko: Person = {
 
 export const lana: Person = {
   key: "lana",
-  name: "Lana",
+  name: "",
   issue: "N° 02",
   season: "Herfst / Winter 2026",
   theme: "Dark academia voor kantoor",
   dek: "Chocolade, bordeaux, bosgroen en crème. Lange jassen, midirokken en truien met textuur: verzorgd genoeg voor kantoor en plaatsbezoeken.",
-  folder: "C:\\Users\\Darko\\Pictures\\Wardrobe Lana",
+  folder: "",
   categories: ["Jassen & blazers", "Truien & cardigans", "Blouses & hemden", "T-shirts & tops", "Broeken", "Jeans", "Rokken", "Jurken", "Schoenen", "Sneakers", "Tassen", "Accessoires", "Sport & outdoor", "Overig"],
   chapterMap: {
     "Jassen & blazers": { cats: ["Jassen & blazers"], kind: "jas" },
