@@ -54,6 +54,7 @@
 .c-front-step__lay img:nth-child(2) { width: 30%; left: 60%; top: 14%; transform: rotate(4deg); }
 .c-front-step__lay img:nth-child(3) { width: 36%; left: 20%; top: 58%; transform: rotate(-8deg); }
 .c-front-step__tags { display: grid; gap: 10px; justify-items: center; padding: 16px; }
+.c-front-step__tags img { width: 62%; height: auto; margin-bottom: 8px; transform: rotate(-4deg); }
 .c-front-step__no { @include label; color: var(--accent); }
 .c-front-step__title { font: 400 32px/1 var(--serif); }
 
@@ -75,3 +76,8 @@
 .c-front-foot a { color: var(--ink); padding-block: 10px; text-decoration: none; background: linear-gradient(currentColor, currentColor) 0 calc(100% - 8px) / 100% 1px no-repeat; transition: background-size .25s, color .2s; }
 .c-front-foot a:hover { color: var(--accent); background-size: 100% 2px; }
 .c-front-foot small { color: var(--ink-2); width: 100%; }
+
+.c-front-why { display: grid; gap: 32px; align-items: center; @include lg { grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); } }
+.c-front-why__art { display: grid; gap: 12px; justify-items: center; padding: 8% 6%; background: var(--paper-2); }
+.c-front-why__art img { width: 86%; height: auto; transform: rotate(4deg); filter: drop-shadow(0 12px 16px color-mix(in srgb, var(--ink) 22%, transparent)); }
+.c-front-why__art figcaption { @include label; color: var(--ink-2); text-align: center; }

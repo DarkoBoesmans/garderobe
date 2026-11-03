@@ -51,7 +51,7 @@ const STEPS: [string, string, string][] = [
   ["Fotografeer", "Leg een stuk op een effen ondergrond en neem een foto. De locatie en andere gegevens in de foto worden gewist voor hij je toestel verlaat.", cut("denim-o", 762, 1200, "Spijkerjas aan een hanger tegen een donkere muur")],
   ["De achtergrond verdwijnt", "Je browser knipt het stuk uit, zonder dat de foto ergens anders heen gaat. Lukt het niet goed, dan hou je met één klik de gewone foto.", cut("denim-c", 793, 900, "Dezelfde spijkerjas, uitgeknipt")],
   ["Leg een outfit", "Tik een vak, kies een stuk. Of laat \"Verras me\" kiezen, dat slaat over wat je de laatste dagen al droeg.", `<span class="c-front-step__lay">${cut("trui-roest-c", 900, 642, "Roestbruine trui")}${cut("jeans-zwart-c", 478, 900, "Zwarte jeans")}${cut("converse-c", 694, 845, "Witte sneakers")}</span>`],
-  ["Koop niets dubbel", "Bij elk stuk in het lookbook zie je \"Heb je al\" als je iets gelijkaardigs hebt, en anders meteen je eigen maat voor dat merk.", `<span class="c-front-step__tags"><span class="c-tag">Heb je al: Chuck Taylor low</span><span class="c-tag c-tag--accent">Jouw maat: L</span></span>`],
+  ["Koop niets dubbel", "Bij elk stuk in het lookbook zie je \"Heb je al\" als je iets gelijkaardigs hebt, en anders meteen je eigen maat voor dat merk.", `<span class="c-front-step__tags">${cut("converse-c", 694, 845, "Witte sneakers die je al hebt")}<span class="c-tag">Heb je al: Chuck Taylor low</span><span class="c-tag c-tag--accent">Jouw maat: 43</span></span>`],
 ];
 
 export function landing(darkoCount: number, lanaCount: number) {
@@ -107,7 +107,10 @@ export function landing(darkoCount: number, lanaCount: number) {
 
   <section class="c-front-sec o-wrap" id="waarom" aria-labelledby="h3">
     <h2 class="c-front-sec__title" id="h3"><small>03</small>Waarom</h2>
-    <p class="c-front-stack"><span>Weet wat</span><em>je hebt.</em><span>Weet wat</span><em>past.</em><span>Koop niets</span><em>dubbel.</em></p>
+    <div class="c-front-why">
+      <p class="c-front-stack"><span>Weet wat</span><em>je hebt.</em><span>Weet wat</span><em>past.</em><span>Koop niets</span><em>dubbel.</em></p>
+      <figure class="c-front-why__art">${cut("trui-roest-c", 900, 642, "Roestbruine trui, al in de kast")}<figcaption>Grofgebreide trui · Kringwinkel · maat L · al in de kast sinds de rommelmarkt</figcaption></figure>
+    </div>
     <p class="c-front-hero__acts"><a class="c-btn" href="app/#demo">Bekijk de demo</a></p>
   </section>
 </main>

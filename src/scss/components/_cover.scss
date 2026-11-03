@@ -58,7 +58,7 @@
 .c-cover__lines { align-self: end; display: grid; gap: 4px; padding: 18px 16px 56px; background: linear-gradient(to top, var(--paper) 62%, transparent); z-index: 1; }
 .c-cover__name { @include display(24cqi); }
 .c-cover__name em { color: var(--accent); font-style: normal; }
-.c-cover__theme { font: italic 400 7.5cqi/1.1 var(--serif); }
+.c-cover__theme { font: italic 400 7.5cqi/1.1 var(--serif); margin-top: .35em; }
 .c-cover__facts { @include label; color: var(--ink-2); }
 .c-cover__cta {
   @include label;
