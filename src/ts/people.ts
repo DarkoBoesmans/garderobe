@@ -60,11 +60,11 @@ export const lana: Person = {
   sizes: women,
 };
 
-/** Verzonnen demo-persoon voor de showcase. ponytail: leent voorlopig het lookbook van Darko tot de demo-set klaar is. */
+/** Verzonnen demo-persoon voor de showcase, met een eigen lookbook van Unsplash-foto's. */
 export const demo: Person = {
   ...darko,
   key: "demo",
-  book: "darko",
+  book: "demo",
   name: "Jules",
   issue: "N° 00",
   theme: "Vintage streetwear",

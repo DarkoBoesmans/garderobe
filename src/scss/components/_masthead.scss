@@ -37,14 +37,15 @@
   gap: 6px;
   min-height: 44px;
   align-items: center;
-  font: 400 22px/1 var(--serif);
+  font: 500 14px/1 var(--mono);
+  text-transform: uppercase;
   text-decoration: none;
   white-space: nowrap;
 }
 .c-masthead__link small { @include label; color: var(--ink-2); }
-.c-masthead__link { background: linear-gradient(var(--accent), var(--accent)) 0 100% / 0 1px no-repeat; transition: background-size .3s; }
-.c-masthead__link:hover { background-size: 100% 1px; }
-.c-masthead__link[aria-current="page"] { font-style: italic; color: var(--accent); }
+.c-masthead__link { background: linear-gradient(var(--accent), var(--accent)) 0 calc(100% - 10px) / 0 2px no-repeat; transition: background-size .3s; }
+.c-masthead__link:hover { background-size: 100% 2px; }
+.c-masthead__link[aria-current="page"] { color: var(--accent); background-size: 100% 2px; }
 .c-masthead__link[aria-current="page"] small { color: var(--accent); }
 
 .c-skip {

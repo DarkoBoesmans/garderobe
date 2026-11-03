@@ -1,83 +1,85 @@
-// Voorpagina. Genummerd menu, platgelegde outfit als opener, covers, stappen, cijfers en gestapelde woorden.
+// Voorpagina, login-kop en 404 als wasetiket: wit, zwart, monospace, kaders zoals de vakjes op een label.
 @use "../tools/mixins" as *;
 
-.c-front-nav { display: flex; align-items: center; gap: 12px 28px; flex-wrap: wrap; padding-block: 18px; border-bottom: 1px solid var(--ink); }
-.c-front-nav__mark { font: 400 40px/1 var(--serif); text-decoration: none; color: var(--ink); }
-.c-front-nav__mark em { color: var(--accent); font-style: normal; }
-.c-front-nav__menu { display: flex; flex-wrap: wrap; gap: 4px 22px; margin-left: auto; }
-.c-front-nav__menu a { font: 400 22px/1 var(--serif); text-decoration: none; color: var(--ink); padding-block: 10px; background: linear-gradient(var(--accent), var(--accent)) 0 100% / 0 2px no-repeat; transition: background-size .3s, color .2s; }
-.c-front-nav__menu a:hover { background-size: 100% 2px; color: var(--accent); }
-.c-front-nav__menu small { @include label; font-size: 10px; margin-right: 6px; vertical-align: .5em; color: var(--ink-2); }
-@media (max-width: 759px) { .c-front-nav__menu { order: 3; width: 100%; margin-left: 0; } .c-front-nav__menu a { font-size: 19px; } .c-front-nav .c-btn { margin-left: auto; } }
+// Gedeelde kop
+.c-top { border-bottom: 1px solid var(--ink); background: var(--paper); }
+.c-top__bar { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 24px; padding-block: 10px; }
+.c-top__mark { font: 500 16px/1 var(--mono); text-transform: uppercase; letter-spacing: .02em; text-decoration: none; color: var(--ink); padding-block: 14px; margin-right: auto; }
+.c-top__mark:hover { color: var(--accent); }
+.c-top__nav { display: flex; flex-wrap: wrap; align-items: center; gap: 0 20px; }
+.c-top__nav a { font: 500 13px/1 var(--mono); text-transform: uppercase; text-decoration: none; color: var(--ink); padding-block: 15px;
+  background: linear-gradient(var(--accent), var(--accent)) 0 calc(100% - 9px) / 0 2px no-repeat; transition: background-size .25s, color .2s; }
+.c-top__nav a:hover { color: var(--accent); background-size: 100% 2px; }
+.c-top__nav .c-top__login { border: 1px solid var(--ink); padding: 12px 14px; background: none; }
+.c-top__nav .c-top__login:hover { background: var(--ink); color: var(--paper); }
 
-.c-front-hero { display: grid; gap: 24px; padding-block: clamp(32px, 6vw, 80px); align-items: center;
-  @include lg { grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); } }
-.c-front-hero__title { @include display(26vw); margin-left: -.05em;
-  @include md { font-size: 20vw; }
-  @include lg { font-size: min(11.5vw, 190px); } }
-.c-front-hero__title em { color: var(--accent); }
-.c-front-hero__dek { font: italic 400 clamp(22px, 2.2vw, 30px)/1.2 var(--serif); max-width: 24ch; margin-top: 22px; }
-.c-front-hero__acts { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 28px; }
+// Opener: titel, één zin, drie stukken op wit, de strook met wasvoorschriften.
+.c-tag-hero { padding-block: clamp(28px, 5vw, 64px) clamp(40px, 6vw, 80px); display: grid; gap: 20px; }
+.c-tag-hero__title { font: 500 min(16.5vw, 228px)/.85 var(--mono); letter-spacing: -.07em; text-transform: uppercase; margin-left: -.04em; }
+.c-tag-hero__lead { font: 400 clamp(18px, 1.8vw, 22px)/1.4 var(--sans); max-width: 44ch; }
+.c-tag-hero__lay { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(8px, 3vw, 48px); align-items: end; padding-block: clamp(16px, 4vw, 48px); border-block: 1px solid var(--ink); }
+.c-tag-hero__lay figure { display: grid; gap: 10px; justify-items: center; min-width: 0; }
+.c-tag-hero__lay img { width: 100%; max-width: 360px; height: auto; max-height: 46vh; object-fit: contain; }
+.c-tag-hero__lay figcaption { @include label; font-size: 11px; color: var(--ink-2); text-align: center; }
+.c-tag-hero__acts { display: flex; flex-wrap: wrap; gap: 10px; }
 
-// Platgelegd zoals op een bed: vijf uitsneden op papier, elk een beetje gedraaid.
-.c-front-hero__lay { position: relative; aspect-ratio: 1 / 1; max-width: 640px; width: 100%; justify-self: center; background: var(--paper-2); }
-.c-front-hero__p { position: absolute; height: auto; filter: drop-shadow(0 10px 14px color-mix(in srgb, var(--ink) 22%, transparent)); transition: transform .6s cubic-bezier(.2, .7, .2, 1); }
-.c-front-hero__p--1 { width: 46%; left: 6%; top: 6%; transform: rotate(-6deg); }
-.c-front-hero__p--2 { width: 34%; left: 54%; top: 4%; transform: rotate(5deg); }
-.c-front-hero__p--3 { width: 30%; left: 30%; top: 46%; transform: rotate(-3deg); }
-.c-front-hero__p--4 { width: 34%; left: 60%; top: 66%; transform: rotate(8deg); }
-.c-front-hero__p--5 { width: 24%; left: 6%; top: 70%; transform: rotate(-12deg); }
-.c-front-hero__lay:hover .c-front-hero__p { transform: rotate(0); }
-@media (prefers-reduced-motion: reduce) { .c-front-hero__p { transition: none; } }
+// Het wasetiket zelf: vier vakjes met een kader, zoals onderaan in een jas.
+.c-care { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); border: 1px solid var(--ink); margin: 0;
+  @include md { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+.c-care > div { padding: 12px 14px; border-right: 1px solid var(--ink); border-bottom: 1px solid var(--ink); display: grid; gap: 6px; min-width: 0; }
+.c-care > div:nth-child(2n) { border-right: 0; }
+.c-care > div:nth-child(n+3) { border-bottom: 0; }
+@include md { .c-care > div { border-bottom: 0; } .c-care > div:nth-child(2n) { border-right: 1px solid var(--ink); } .c-care > div:last-child { border-right: 0; } }
+.c-care dt { @include label; font-size: 11px; color: var(--ink-2); }
+.c-care dd { margin: 0; font: 500 15px/1.3 var(--mono); }
+.c-care__icons { display: flex; gap: 10px; align-items: center; }
+.c-care__icons svg, .c-steps__icon svg { width: 34px; height: 28px; color: var(--ink); }
 
-.c-front-sec { padding-block: clamp(48px, 8vw, 112px); border-top: 1px solid var(--ink); }
-.c-front-sec__title { @include display(clamp(52px, 8vw, 112px)); display: flex; align-items: start; gap: 14px; }
-.c-front-sec__title small { @include label; color: var(--accent); margin-top: .6em; }
-.c-front-sec__dek { max-width: 52ch; margin-top: 18px; color: var(--ink-2); }
+.c-sec-title { font: 500 clamp(28px, 4vw, 48px)/1 var(--mono); letter-spacing: -.04em; text-transform: uppercase; }
 
-.c-front-covers { display: grid; gap: clamp(28px, 4vw, 56px); margin-top: clamp(32px, 5vw, 64px);
-  @include md { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  @include lg { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
-@media (max-width: 759px) { .c-front-covers .c-cover { max-width: 360px; justify-self: center; width: 100%; } }
+// Archief: elk stuk in een vakje, foto op wit, label eronder.
+.c-archive { padding-block: clamp(40px, 6vw, 80px); }
+.c-archive__head { display: grid; gap: 12px; margin-bottom: 28px; @include lg { grid-template-columns: 1fr 1fr; align-items: end; } }
+.c-archive__head p { color: var(--ink-2); max-width: 52ch; }
+.c-archive__grid { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); border-top: 1px solid var(--ink); border-left: 1px solid var(--ink);
+  @include md { grid-template-columns: repeat(7, minmax(0, 1fr)); } }
+.c-archive__item { border-right: 1px solid var(--ink); border-bottom: 1px solid var(--ink); display: grid; grid-template-rows: 1fr auto; min-width: 0; }
+.c-archive__item img { width: 100%; aspect-ratio: 3 / 4; height: auto; object-fit: contain; padding: 14%; background: var(--paper); transition: transform .3s; }
+.c-archive__item:hover img { transform: scale(1.06); }
+.c-archive__item p { display: grid; gap: 2px; padding: 8px 10px 10px; border-top: 1px solid var(--ink); font: 400 12px/1.3 var(--mono); }
+.c-archive__item b { font-weight: 500; text-transform: uppercase; overflow-wrap: anywhere; }
+.c-archive__item span { color: var(--ink-2); }
+.c-archive__item--more { display: grid; }
+.c-archive__item--more a { display: grid; place-items: center; padding: 16px; text-align: center; font: 500 13px/1.3 var(--mono); text-transform: uppercase; text-decoration: none; background: var(--accent); color: var(--paper); transition: background .2s; }
+.c-archive__item--more a:hover { background: var(--ink); color: var(--paper); }
 
-.c-front-steps { list-style: none; display: grid; gap: 40px 28px; margin-top: clamp(32px, 5vw, 64px); padding: 0;
-  @include md { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  @include lg { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
-.c-front-step { display: grid; gap: 8px; align-content: start; min-width: 0; }
-.c-front-step p { color: var(--ink-2); max-width: 36ch; }
-.c-front-step__art { display: grid; place-items: center; aspect-ratio: 4 / 5; background: var(--paper-2); overflow: hidden; margin-bottom: 10px; }
-.c-front-step__art > img { width: 70%; height: auto; }
-.c-front-step:first-child .c-front-step__art > img { width: 100%; height: 100%; object-fit: cover; }
-.c-front-step__lay { display: block; position: relative; width: 100%; height: 100%; }
-.c-front-step__lay img { position: absolute; height: auto; }
-.c-front-step__lay img:nth-child(1) { width: 62%; left: 6%; top: 8%; transform: rotate(-5deg); }
-.c-front-step__lay img:nth-child(2) { width: 30%; left: 60%; top: 14%; transform: rotate(4deg); }
-.c-front-step__lay img:nth-child(3) { width: 36%; left: 20%; top: 58%; transform: rotate(-8deg); }
-.c-front-step__tags { display: grid; gap: 10px; justify-items: center; padding: 16px; }
-.c-front-step__tags img { width: 62%; height: auto; margin-bottom: 8px; transform: rotate(-4deg); }
-.c-front-step__no { @include label; color: var(--accent); }
-.c-front-step__title { font: 400 32px/1 var(--serif); }
+// Werking: per symbool een stap, als de regels op een wasvoorschrift.
+.c-steps { padding-block: clamp(40px, 6vw, 80px); border-top: 1px solid var(--ink); }
+.c-steps__list { list-style: none; margin: 28px 0 0; padding: 0; border-top: 1px solid var(--ink); }
+.c-steps__list li { display: grid; grid-template-columns: 48px minmax(0, 1fr); gap: 4px 16px; padding-block: 18px; border-bottom: 1px solid var(--ink);
+  @include md { grid-template-columns: 64px minmax(0, 18ch) minmax(0, 1fr); align-items: center; gap: 24px; } }
+.c-steps__list h3 { font: 500 16px/1.25 var(--mono); text-transform: uppercase; }
+.c-steps__list p { color: var(--ink-2); grid-column: 2; max-width: 60ch; @include md { grid-column: auto; } }
+.c-steps__icon { grid-row: span 2; @include md { grid-row: auto; } }
 
-.c-front-nums { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 28px; padding-block: clamp(40px, 6vw, 80px); border-top: 1px solid var(--ink);
-  @include lg { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
-.c-front-nums p { display: grid; gap: 6px; }
-.c-front-nums b { font: 400 clamp(56px, 7vw, 96px)/.9 var(--serif); font-variant-numeric: tabular-nums; }
-.c-front-nums span { @include label; color: var(--ink-2); }
+// Drie kasten als geweven labels.
+.c-labels { padding-block: clamp(40px, 6vw, 80px); border-top: 1px solid var(--ink); }
+.c-labels__row { display: grid; gap: 16px; margin-top: 28px; @include md { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+.c-label { display: grid; gap: 14px; align-content: start; padding: 20px; border: 1px solid var(--ink); min-width: 0; }
+.c-label__kind { @include label; font-size: 11px; color: var(--accent); }
+.c-label__name { font: 500 clamp(40px, 5vw, 64px)/1 var(--mono); letter-spacing: -.05em; text-transform: uppercase; }
+.c-label__lines { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--ink); }
+.c-label__lines li { padding-block: 8px; border-bottom: 1px solid var(--ink); font: 400 13px/1.35 var(--mono); }
+.c-label .c-btn { justify-self: start; }
 
-// Gestapelde woorden: elk deel op een eigen regel, het tweede deel cursief in de accentkleur.
-.c-front-stack { display: grid; margin-top: clamp(28px, 4vw, 48px); }
-.c-front-stack span, .c-front-stack em { @include display(clamp(56px, 11vw, 168px)); }
-.c-front-stack em { color: var(--accent); padding-left: .6em; margin-bottom: .18em; }
+.c-foot { display: flex; flex-wrap: wrap; gap: 8px 28px; align-items: center; padding-block: 24px 40px; border-top: 1px solid var(--ink); font: 400 13px/1.4 var(--mono); }
+.c-foot nav { display: flex; flex-wrap: wrap; gap: 0 20px; }
+.c-foot a { padding-block: 12px; color: var(--ink); text-decoration: none; background: linear-gradient(currentColor, currentColor) 0 calc(100% - 9px) / 100% 1px no-repeat; transition: background-size .25s, color .2s; }
+.c-foot a:hover { color: var(--accent); background-size: 100% 2px; }
+.c-foot p:last-child { color: var(--ink-2); width: 100%; }
 
-.c-front-foot { display: flex; flex-wrap: wrap; align-items: baseline; gap: 12px 28px; padding-block: 28px 40px; border-top: 1px solid var(--ink); }
-.c-front-foot__mark { font: 400 32px/1 var(--serif); }
-.c-front-foot__mark em { color: var(--accent); }
-.c-front-foot nav { display: flex; flex-wrap: wrap; gap: 4px 18px; }
-.c-front-foot a { color: var(--ink); padding-block: 10px; text-decoration: none; background: linear-gradient(currentColor, currentColor) 0 calc(100% - 8px) / 100% 1px no-repeat; transition: background-size .25s, color .2s; }
-.c-front-foot a:hover { color: var(--accent); background-size: 100% 2px; }
-.c-front-foot small { color: var(--ink-2); width: 100%; }
-
-.c-front-why { display: grid; gap: 32px; align-items: center; @include lg { grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); } }
-.c-front-why__art { display: grid; gap: 12px; justify-items: center; padding: 8% 6%; background: var(--paper-2); }
-.c-front-why__art img { width: 86%; height: auto; transform: rotate(4deg); filter: drop-shadow(0 12px 16px color-mix(in srgb, var(--ink) 22%, transparent)); }
-.c-front-why__art figcaption { @include label; color: var(--ink-2); text-align: center; }
+// 404
+.c-lost { padding-block: clamp(48px, 10vw, 140px); display: grid; gap: 16px; justify-items: start; }
+.c-lost__code { font: 500 min(30vw, 260px)/.85 var(--mono); letter-spacing: -.07em; color: var(--accent); }
+.c-lost__title { font: 500 clamp(28px, 4vw, 48px)/1 var(--mono); text-transform: uppercase; letter-spacing: -.04em; }
+.c-lost__acts { display: flex; flex-wrap: wrap; gap: 10px; }

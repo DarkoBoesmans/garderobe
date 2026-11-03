@@ -2,9 +2,9 @@
 @use "../tools/mixins" as *;
 
 .c-chapter { padding-block: 56px 24px; border-bottom: 1px solid var(--line); }
-.c-chapter__num { @include display(clamp(72px, 9vw, 132px)); color: var(--accent); font-style: italic; }
+.c-chapter__num { @include display(clamp(72px, 9vw, 132px)); color: var(--accent);  }
 .c-chapter__title { @include display(clamp(36px, 4vw, 56px)); line-height: .95; margin: 8px 0 12px; }
 .c-chapter__note { color: var(--ink-2); max-width: 36ch; }
 .c-chapter__count { @include label; color: var(--ink-2); margin-top: 14px; }
-.c-empty { font: italic 400 28px/1.2 var(--serif); color: var(--ink-2); padding-block: 48px; max-width: 30ch; }
+.c-empty { font: 500 calc(28px * .6)/1.2 var(--mono); color: var(--ink-2); padding-block: 48px; max-width: 30ch; }
 .c-chapter__more { margin-top: 28px; }

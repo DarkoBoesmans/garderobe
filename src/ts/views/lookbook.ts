@@ -49,7 +49,7 @@ export const lookbook: View = {
     const p = S.person, shops = [...new Set(S.look.items.map((x) => x.s))].sort();
     el.innerHTML = `
 <section class="c-hero">
-  <div><p class="c-hero__kicker">Wat je wilt · ${esc(p.issue)}</p><h1 class="c-hero__title">Look<em>book.</em></h1></div>
+  <div><p class="c-hero__kicker">Wat je wilt · ${esc(p.issue)}</p><h1 class="c-hero__title">Lookbook</h1></div>
   <div><p class="c-hero__theme">${esc(p.theme)}</p><p class="c-hero__dek">${esc(p.dek)}</p><div class="c-hero__facts" id="lfacts"></div></div>
 </section>
 <section class="c-looks" id="looks" aria-labelledby="looks-t"></section>

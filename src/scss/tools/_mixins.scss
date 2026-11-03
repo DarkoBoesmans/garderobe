@@ -2,15 +2,16 @@
 @use "../settings/tokens" as *;
 
 @mixin label {
-  font: 600 11px/1.2 var(--sans);
-  font-stretch: 112%;
-  letter-spacing: .14em;
+  font: 500 12px/1.3 var(--mono);
+  letter-spacing: .02em;
   text-transform: uppercase;
 }
 
+// Koppen in monospace hoofdletters, zoals op een wasetiket. Mono is breed, dus de maat schaalt mee terug.
 @mixin display($size) {
-  font: 400 #{$size}/.82 var(--serif);
-  letter-spacing: -.025em;
+  font: 500 calc(#{$size} * .5)/.95 var(--mono);
+  letter-spacing: -.04em;
+  text-transform: uppercase;
 }
 
 @mixin md { @media (min-width: $bp-md) { @content; } }

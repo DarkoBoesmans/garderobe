@@ -1,122 +1,96 @@
-// Voorpagina: genummerd menu, een platgelegde outfit als opener, de drie kasten als tijdschriftcovers,
-// hoe het werkt in vier stappen, de cijfers en de drie redenen in grote gestapelde woorden.
-import { readFileSync } from "node:fs";
-
-interface Look { items: { id: string; sh: string; k: number; d: string; s: string }[]; dirs: { n: string; p: string[] }[]; sheets: Record<string, [number, number, number]> }
+// Voorpagina als wasetiket: grote uitsneden op wit, een strook met wasvoorschriften,
+// de demo-kast als archiefraster, hoe het werkt per symbool, en de drie kasten als geweven labels.
+import { CARE, top } from "../src/ts/views/top.ts";
 
 const esc = (s: string) => s.replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]!);
-const book = (k: string) => JSON.parse(readFileSync(`data/${k}-lookbook.json`, "utf8")) as Look;
 
-function sprite(look: Look, id: string, base: string, cls: string) {
-  const x = look.items.find((i) => i.id === id)!;
-  const [c, r, ratio] = look.sheets[x.sh]!;
-  const pos = `${c > 1 ? ((x.k % c) * 100) / (c - 1) : 0}% ${r > 1 ? (Math.floor(x.k / c) * 100) / (r - 1) : 0}%`;
-  return `<span class="${cls}" role="img" aria-label="${esc(`${x.s}: ${x.d}`)}" style="aspect-ratio:${ratio};background-image:url(${base}/${x.sh}.jpg);background-size:${c * 100}% ${r * 100}%;background-position:${pos}"></span>`;
-}
+/** Een uitsnede uit de demo-kast (kleine versie), met vaste afmetingen tegen verspringen. */
+const cut = (f: string, w: number, h: number, alt: string, eager = false) =>
+  `<img src="app/demo/${f}-s.webp" width="${w}" height="${h}" alt="${esc(alt)}"${eager ? ' fetchpriority="high"' : ' loading="lazy"'} decoding="async">`;
 
-/** Een uitsnede uit de demo-kast als echte <img>, met vaste afmetingen tegen verspringen. */
-const cut = (f: string, w: number, h: number, alt: string, cls = "", eager = false) =>
-  `<img class="${cls}" src="app/demo/${f}-s.webp" width="${w}" height="${h}" alt="${esc(alt)}"${eager ? ' fetchpriority="high"' : ' loading="lazy"'} decoding="async">`;
-
-function cover(p: { key: string; name: string; issue: string; theme: string; href: string; cta: string; facts: string }, art: string, inset: string) {
-  return `<a class="c-cover" href="${p.href}" data-person="${p.key === "jules" ? "darko" : p.key}">
-  <span class="c-cover__mast"><span>Garderobe</span><span>${p.issue}</span></span>
-  ${art}
-  <span class="c-cover__inset">${inset}</span>
-  <span class="c-cover__lines">
-    <span class="c-cover__name">${p.name}<em>.</em></span>
-    <span class="c-cover__theme">${esc(p.theme)}</span>
-    <span class="c-cover__facts">${p.facts}</span>
-  </span>
-  <span class="c-cover__cta">${p.cta}</span>
-</a>`;
-}
-
-function covers() {
-  const jules = cover({ key: "jules", name: "Jules", issue: "N° 00", theme: "Vintage streetwear", href: "app/#demo", cta: "Open de demo, zonder account", facts: "14 stuks · alles tweedehands · verzonnen" },
-    `<span class="c-cover__hero c-cover__hero--cut">${cut("denim-c", 793, 900, "Raw denim trucker jacket")}</span>`,
-    `${cut("vans-rood-c", 900, 631, "Rode suède sneakers", "c-cover__thumb c-cover__thumb--cut")}${cut("jeans-licht-c", 606, 784, "Lichte baggy jeans", "c-cover__thumb c-cover__thumb--cut")}`);
-  const real = [
-    { key: "darko", name: "Darko", issue: "N° 01", theme: "Warme heritage casual" },
-    { key: "lana", name: "Lana", issue: "N° 02", theme: "Dark academia voor kantoor" },
-  ].map((p) => {
-    const look = book(p.key), [hero, ...rest] = look.dirs[0]!.p, base = `app/sheets/${p.key}`;
-    return cover({ ...p, href: "app/", cta: "Log in om je kast te openen", facts: `${look.items.length} stuks in het lookbook · ${look.dirs.length} looks` },
-      sprite(look, hero!, base, "c-cover__hero"), rest.slice(0, 2).map((id) => sprite(look, id, base, "c-cover__thumb")).join(""));
-  });
-  return [jules, ...real].join("");
-}
-
-const STEPS: [string, string, string][] = [
-  ["Fotografeer", "Leg een stuk op een effen ondergrond en neem een foto. De locatie en andere gegevens in de foto worden gewist voor hij je toestel verlaat.", cut("denim-o", 762, 1200, "Spijkerjas aan een hanger tegen een donkere muur")],
-  ["De achtergrond verdwijnt", "Je browser knipt het stuk uit, zonder dat de foto ergens anders heen gaat. Lukt het niet goed, dan hou je met één klik de gewone foto.", cut("denim-c", 793, 900, "Dezelfde spijkerjas, uitgeknipt")],
-  ["Leg een outfit", "Tik een vak, kies een stuk. Of laat \"Verras me\" kiezen, dat slaat over wat je de laatste dagen al droeg.", `<span class="c-front-step__lay">${cut("trui-roest-c", 900, 642, "Roestbruine trui")}${cut("jeans-zwart-c", 478, 900, "Zwarte jeans")}${cut("converse-c", 694, 845, "Witte sneakers")}</span>`],
-  ["Koop niets dubbel", "Bij elk stuk in het lookbook zie je \"Heb je al\" als je iets gelijkaardigs hebt, en anders meteen je eigen maat voor dat merk.", `<span class="c-front-step__tags">${cut("converse-c", 694, 845, "Witte sneakers die je al hebt")}<span class="c-tag">Heb je al: Chuck Taylor low</span><span class="c-tag c-tag--accent">Jouw maat: 43</span></span>`],
+// [bestand, breedte, hoogte, naam, maat, materiaal]
+const KAST: [string, number, number, string, string, string][] = [
+  ["denim-c", 388, 440, "Trucker jacket", "M", "Denim"],
+  ["flanel-c", 296, 440, "Flanellen overshirt", "L", "Katoen"],
+  ["hoodie-wit-c", 259, 440, "Witte hoodie", "M", "Katoen"],
+  ["tee-wit-c", 281, 440, "Wit T-shirt", "M", "Katoen"],
+  ["tee-grijs-c", 313, 440, "Gemêleerd T-shirt", "M", "Katoen"],
+  ["trui-roest-c", 440, 314, "Grofgebreide trui", "L", "Wol"],
+  ["jeans-zwart-c", 234, 440, "Zwarte slim jeans", "W32 L32", "Denim"],
+  ["jeans-licht-c", 340, 440, "Lichte baggy jeans", "W33 L32", "Denim"],
+  ["broek-grijs-c", 167, 440, "Grijze werkbroek", "W32 L32", "Katoen"],
+  ["vans-rood-c", 440, 308, "Rode suède sneakers", "43", "Suède"],
+  ["converse-c", 361, 440, "Witte canvas sneakers", "43", "Canvas"],
+  ["pet-trucker-c", 423, 440, "Trucker cap", "One size", "Polyester"],
+  ["pet-geel-c", 440, 295, "Gele dad cap", "One size", "Katoen"],
 ];
 
-export function landing(darkoCount: number, lanaCount: number) {
+const STEPS: [keyof typeof CARE, string, string][] = [
+  ["wash", "Fotografeer een stuk", "Op een effen ondergrond, met je gsm. De locatie en andere gegevens in de foto worden gewist voor hij je toestel verlaat."],
+  ["nobleach", "De achtergrond verdwijnt", "Je browser knipt het stuk uit; de foto gaat daarvoor nergens heen. Lukt het niet goed, dan hou je met één klik de gewone foto."],
+  ["iron", "Leg een outfit", "Kies per vak een stuk, of laat de app kiezen. Wat je de laatste dagen droeg, slaat hij over."],
+  ["nodry", "Koop niets dubbel", "Bij een stuk dat je wilt kopen zie je of je al iets gelijkaardigs hebt, en anders meteen je maat voor dat merk."],
+];
+
+function label(name: string, kind: string, lines: string[], href: string, cta: string, primary = false) {
+  return `<article class="c-label">
+  <p class="c-label__kind">${kind}</p>
+  <h3 class="c-label__name">${name}</h3>
+  <ul class="c-label__lines">${lines.map((l) => `<li>${l}</li>`).join("")}</ul>
+  <a class="c-btn${primary ? "" : " c-btn--ghost"}" href="${href}">${cta}</a>
+</article>`;
+}
+
+export function landing() {
+  const kast = KAST;
   return `
 <a class="c-skip" href="#main">Naar de inhoud</a>
-<header class="c-front-nav o-wrap">
-  <a class="c-front-nav__mark" href="./" aria-label="G. Garderobe, naar de voorpagina">G<em>.</em></a>
-  <nav class="c-front-nav__menu" aria-label="Voorpagina">
-    <a href="#kasten"><small>01</small>Kasten</a>
-    <a href="#werking"><small>02</small>Werking</a>
-    <a href="#waarom"><small>03</small>Waarom</a>
-    <a href="app/#info"><small>04</small>Colofon</a>
-  </nav>
-  <a class="c-btn c-btn--small c-btn--ghost" href="app/">Inloggen</a>
-</header>
+${top("")}
 <main id="main" tabindex="-1">
-  <section class="c-front-hero o-wrap" aria-labelledby="t">
-    <div class="c-front-hero__text">
-      <p class="c-hero__kicker">N° 00 tot 02 · Herfst / winter 2026</p>
-      <h1 class="c-front-hero__title" id="t">Garde<em>robe.</em></h1>
-      <p class="c-front-hero__dek">Je kleerkast, uitgeknipt en op papier gelegd. Met outfits, maten en een lookbook dat weet wat je al hebt.</p>
-      <p class="c-front-hero__acts"><a class="c-btn" href="app/#demo">Bekijk de demo</a> <a class="c-btn c-btn--ghost" href="app/">Log in op je kast</a></p>
+  <section class="c-tag-hero o-wrap" aria-labelledby="t">
+    <h1 class="c-tag-hero__title" id="t">Garderobe</h1>
+    <p class="c-tag-hero__lead">Je kleerkast in je broekzak. Wat je hebt, wat past, en wat je dus niet nog eens koopt.</p>
+    <div class="c-tag-hero__lay">
+      <figure>${cut("denim-c", 388, 440, "Spijkerjas, uitgeknipt", true)}<figcaption>Trucker jacket · M · denim</figcaption></figure>
+      <figure>${cut("jeans-licht-c", 340, 440, "Lichte jeans, uitgeknipt", true)}<figcaption>Baggy jeans · W33 · denim</figcaption></figure>
+      <figure>${cut("vans-rood-c", 440, 308, "Rode sneakers, uitgeknipt")}<figcaption>Sneakers · 43 · suède</figcaption></figure>
     </div>
-    <div class="c-front-hero__lay" aria-hidden="true">
-      ${cut("denim-c", 793, 900, "", "c-front-hero__p c-front-hero__p--1", true)}
-      ${cut("tee-wit-c", 574, 900, "", "c-front-hero__p c-front-hero__p--2", true)}
-      ${cut("jeans-licht-c", 606, 784, "", "c-front-hero__p c-front-hero__p--3")}
-      ${cut("vans-rood-c", 900, 631, "", "c-front-hero__p c-front-hero__p--4")}
-      ${cut("pet-geel-c", 720, 482, "", "c-front-hero__p c-front-hero__p--5")}
-    </div>
+    <dl class="c-care">
+      <div><dt>Samenstelling</dt><dd>100% je eigen kleren</dd></div>
+      <div><dt>Maat</dt><dd>De jouwe, per merk</dd></div>
+      <div><dt>Onderhoud</dt><dd class="c-care__icons">${CARE.wash}${CARE.nobleach}${CARE.iron}${CARE.nodry}</dd></div>
+      <div><dt>Bewaren</dt><dd>In de EU, privé</dd></div>
+    </dl>
+    <p class="c-tag-hero__acts"><a class="c-btn" href="app/#demo">Open de demo</a><a class="c-btn c-btn--ghost" href="app/">Inloggen</a></p>
   </section>
 
-  <section class="c-front-sec o-wrap" id="kasten" aria-labelledby="h1">
-    <h2 class="c-front-sec__title" id="h1"><small>01</small>Drie kasten</h2>
-    <p class="c-front-sec__dek">Jules is verzonnen en open voor iedereen. De kasten van Darko en Lana zijn echt en staan achter een account.</p>
-    <div class="c-front-covers">${covers()}</div>
+  <section class="c-archive o-wrap" aria-labelledby="h1">
+    <div class="c-archive__head"><h2 class="c-sec-title" id="h1">De demo-kast</h2><p>Jules is verzonnen. Dit is wat Jules heeft, uitgeknipt en gesorteerd. Open de demo om er outfits mee te leggen.</p></div>
+    <ul class="c-archive__grid">${kast.map(([f, w, h, n, m, mat]) => `
+      <li class="c-archive__item">${cut(f, w, h, n)}<p><b>${esc(n)}</b><span>${esc(m)} · ${esc(mat)}</span></p></li>`).join("")}
+      <li class="c-archive__item c-archive__item--more"><a href="app/#demo">Leg er een outfit mee</a></li>
+    </ul>
   </section>
 
-  <section class="c-front-sec o-wrap" id="werking" aria-labelledby="h2">
-    <h2 class="c-front-sec__title" id="h2"><small>02</small>Zo werkt het</h2>
-    <ol class="c-front-steps">${STEPS.map(([t, d, art], i) => `
-      <li class="c-front-step"><span class="c-front-step__art">${art}</span>
-        <span class="c-front-step__no">0${i + 1}</span><h3 class="c-front-step__title">${t}</h3><p>${esc(d)}</p></li>`).join("")}
+  <section class="c-steps o-wrap" id="werking" aria-labelledby="h2">
+    <h2 class="c-sec-title" id="h2">Werking</h2>
+    <ol class="c-steps__list">${STEPS.map(([icon, t, d]) => `
+      <li><span class="c-steps__icon">${CARE[icon]}</span><h3>${t}</h3><p>${esc(d)}</p></li>`).join("")}
     </ol>
   </section>
 
-  <section class="c-front-nums o-wrap" aria-label="In cijfers">
-    <p><b>${(darkoCount + lanaCount).toLocaleString("nl-BE")}</b><span>stuks in de lookbooks</span></p>
-    <p><b>14</b><span>stuks in de demo-kast</span></p>
-    <p><b>24 u</b><span>tot de demo zichzelf wist</span></p>
-    <p><b>0</b><span>trackers, advertenties of cookies</span></p>
-  </section>
-
-  <section class="c-front-sec o-wrap" id="waarom" aria-labelledby="h3">
-    <h2 class="c-front-sec__title" id="h3"><small>03</small>Waarom</h2>
-    <div class="c-front-why">
-      <p class="c-front-stack"><span>Weet wat</span><em>je hebt.</em><span>Weet wat</span><em>past.</em><span>Koop niets</span><em>dubbel.</em></p>
-      <figure class="c-front-why__art">${cut("trui-roest-c", 900, 642, "Roestbruine trui, al in de kast")}<figcaption>Grofgebreide trui · Kringwinkel · maat L · al in de kast sinds de rommelmarkt</figcaption></figure>
+  <section class="c-labels o-wrap" aria-labelledby="h3">
+    <h2 class="c-sec-title" id="h3">Drie kasten</h2>
+    <div class="c-labels__row">
+      ${label("Jules", "Demo · verzonnen", ["14 stuks, alles tweedehands", "Open voor iedereen, zonder account", "Na 24 uur gewist"], "app/#demo", "Open de demo", true)}
+      ${label("Darko", "Privé", ["Eigen kast en een privé lookbook", "Alleen na inloggen", "Op uitnodiging"], "app/", "Inloggen")}
+      ${label("Lana", "Privé", ["Eigen kast en een privé lookbook", "Alleen na inloggen", "Op uitnodiging"], "app/", "Inloggen")}
     </div>
-    <p class="c-front-hero__acts"><a class="c-btn" href="app/#demo">Bekijk de demo</a></p>
   </section>
 </main>
-<footer class="c-front-foot o-wrap">
-  <span class="c-front-foot__mark">Garde<em>robe.</em></span>
-  <nav aria-label="Voettekst"><a href="app/#demo">Demo</a><a href="app/">Inloggen</a><a href="app/#info">Privacy en colofon</a><a href="https://github.com/DarkoBoesmans/garderobe">Broncode op GitHub</a></nav>
-  <small>Niet commercieel. AGPL-3.0. Een project van Darko Boesmans.</small>
+<footer class="c-foot o-wrap">
+  <p>Gemaakt door Darko Boesmans</p>
+  <nav aria-label="Voettekst"><a href="app/#info">Privacy en voorwaarden</a><a href="https://github.com/DarkoBoesmans/garderobe">Broncode (AGPL-3.0)</a></nav>
+  <p>Niet commercieel · Geen cookies · Geen trackers</p>
 </footer>`;
 }

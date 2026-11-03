@@ -26,7 +26,7 @@ export function startShell(app: HTMLElement) {
 <a class="c-skip" href="#view" data-skip>Naar de inhoud</a>
 <header class="c-masthead"><div class="o-wrap c-masthead__bar">
   <span class="c-masthead__issue"><b>${esc(p.issue)}</b> De garderobe van ${esc(p.name)}</span>
-  <nav class="c-masthead__nav" aria-label="Onderdelen">${NAV.map(([h, l], i) => `<a class="c-masthead__link" href="${h}"><small>0${i + 1}</small>${l}</a>`).join("")}</nav>
+  <nav class="c-masthead__nav" aria-label="Onderdelen">${NAV.map(([h, l]) => `<a class="c-masthead__link" href="${h}">${l}</a>`).join("")}</nav>
   <span class="c-masthead__season">${esc(p.season)}</span>
 </div></header>
 <main id="view" class="o-wrap" tabindex="-1"></main>

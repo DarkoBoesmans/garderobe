@@ -21,4 +21,4 @@
   padding-block: 10px 0;
 }
 .c-toc a { @include label; text-decoration: none; display: inline-flex; min-height: 36px; align-items: center; gap: 6px; }
-.c-toc a span { font: italic 400 16px var(--serif); letter-spacing: 0; text-transform: none; color: var(--accent); }
+.c-toc a span { font: 500 calc(16px * .6) var(--mono); letter-spacing: 0; text-transform: none; color: var(--accent); }

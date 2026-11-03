@@ -4,6 +4,8 @@ import type { Body, Item, Lookbook, Outfit, Person, Prefs } from "./types";
 export const S = {
   person: undefined as unknown as Person,
   look: undefined as unknown as Lookbook,
+  /** Sprite sheet naar URL: statisch voor de demo, signed URL (12 uur) voor de private lookbooks. */
+  sheetUrl: {} as Record<string, string>,
   uid: "",
   email: "",
   items: [] as Item[],

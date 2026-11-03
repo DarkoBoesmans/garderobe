@@ -7,3 +7,6 @@
 }
 .u-accent { color: var(--accent) !important; }
 .u-muted { color: var(--ink-2) !important; }
+
+// Wasetiket: geen romeinse cijfers of volgnummers als versiering.
+.c-chapter__num, .c-look__num, .c-outfit__num, .c-card__no { display: none !important; }

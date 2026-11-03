@@ -23,7 +23,7 @@ img.c-card__img { object-fit: cover; aspect-ratio: 4 / 5; }
 .c-card__shop { @include label; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; flex: 1 1 0; }
 .c-card__price { font: 500 13px var(--sans); font-variant-numeric: tabular-nums; white-space: nowrap; text-align: right; }
 .c-card__price small { display: block; color: var(--ink-2); font-size: 11px; }
-.c-card__title { font: italic 400 21px/1.1 var(--serif); }
+.c-card__title { font: 500 calc(21px * .6)/1.1 var(--mono); }
 .c-card__title a { text-decoration: none; }
 .c-card__meta { font-size: 13px; color: var(--ink-2); }
 .c-card__meta b { color: var(--ink); font-weight: 600; }

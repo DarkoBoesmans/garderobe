@@ -43,7 +43,7 @@ export const kast: View = {
   mount(el) {
     el.innerHTML = `
 <section class="c-hero">
-  <div><p class="c-hero__kicker">Wat je hebt · ${esc(S.person.issue)}</p><h1 class="c-hero__title">Kleer<em>kast.</em></h1></div>
+  <div><p class="c-hero__kicker">Wat je hebt · ${esc(S.person.issue)}</p><h1 class="c-hero__title">Kleerkast</h1></div>
   <div><p class="c-hero__theme">Stuk per stuk.</p>
     <p class="c-hero__dek">Alles wat je hebt, stuk per stuk. Fotografeer een stuk op een effen ondergrond: de achtergrond verdwijnt vanzelf.</p>
     <div class="c-hero__facts" id="kfacts"></div></div>

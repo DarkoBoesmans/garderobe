@@ -3,7 +3,7 @@
 
 .c-maten { display: grid; gap: 40px; padding-block: 40px 64px; @include lg { grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); } }
 .c-maten__group { border-top: 1px solid var(--ink); padding-top: 10px; margin-bottom: 28px; }
-.c-maten__legend { font: italic 400 30px var(--serif); margin-bottom: 6px; }
+.c-maten__legend { font: 500 calc(30px * .6) var(--mono); margin-bottom: 6px; }
 .c-maten__row { display: grid; gap: 4px 16px; padding-block: 10px; border-bottom: 1px solid var(--line); @include md { grid-template-columns: 170px 140px minmax(0, 1fr); align-items: center; } }
 .c-maten__label { font-weight: 600; }
 .c-maten__input { display: flex; align-items: center; gap: 6px; }

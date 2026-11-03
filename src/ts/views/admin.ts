@@ -33,7 +33,7 @@ export const admin: View = {
   mount(el) {
     el.innerHTML = `
 <section class="c-hero">
-  <div><p class="c-hero__kicker">Alleen voor jou</p><h1 class="c-hero__title">Be<em>heer.</em></h1></div>
+  <div><p class="c-hero__kicker">Alleen voor jou</p><h1 class="c-hero__title">Beheer</h1></div>
   <div><p class="c-hero__theme">Wie mag binnen.</p>
   <p class="c-hero__dek">Alleen uitgenodigde e-mailadressen kunnen een account maken. Wie je uitnodigt, krijgt een eigen, lege kast; kies "Darko" of "Lana" alleen voor jullie twee. Een uitnodiging intrekken wist geen bestaand account.</p></div>
 </section>

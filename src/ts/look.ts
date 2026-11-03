@@ -15,7 +15,7 @@ export function sprite(x: LookItem, cls = "c-card__img") {
   const [c, r, ratio] = S.look.sheets[x.sh]!;
   const col = x.k % c, row = Math.floor(x.k / c);
   const pos = `${c > 1 ? (col * 100) / (c - 1) : 0}% ${r > 1 ? (row * 100) / (r - 1) : 0}%`;
-  return `<span class="${cls}" role="img" aria-label="${esc(brand(x) + ": " + x.d)}" style="aspect-ratio:${ratio};background-image:url(sheets/${S.person.book ?? S.person.key}/${x.sh}.jpg);background-size:${c * 100}% ${r * 100}%;background-position:${pos}"></span>`;
+  return `<span class="${cls}" role="img" aria-label="${esc(brand(x) + ": " + x.d)}" style="aspect-ratio:${ratio};background-image:url(${S.sheetUrl[x.sh] ?? ""});background-size:${c * 100}% ${r * 100}%;background-position:${pos}"></span>`;
 }
 
 export function price(x: LookItem) {

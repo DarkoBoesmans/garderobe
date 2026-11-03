@@ -27,18 +27,18 @@
   background: transparent;
   cursor: pointer;
   transition: transform .4s cubic-bezier(.2, .7, .2, 1), border-color .2s;
-  &:hover { transform: rotate(0) scale(1.02); border-color: var(--ink-2); }
+  &:hover { border-color: var(--accent); }
   &[aria-pressed="true"] { border: 2px solid var(--accent); }
-  img { width: 100%; height: 100%; object-fit: contain; transform: rotate(var(--tilt, 0deg)); filter: drop-shadow(0 12px 14px color-mix(in srgb, var(--ink) 22%, transparent)); }
+  img { width: 100%; height: 100%; object-fit: contain; }
 }
 @include md {
-  .c-board__slot--0 { grid-area: s0; aspect-ratio: auto; --tilt: -3deg; }
-  .c-board__slot--1 { grid-area: s1; --tilt: 2deg; }
-  .c-board__slot--2 { grid-area: s2; --tilt: -1.5deg; }
-  .c-board__slot--3 { grid-area: s3; --tilt: 4deg; }
-  .c-board__slot--4 { grid-area: s4; --tilt: -2deg; }
+  .c-board__slot--0 { grid-area: s0; aspect-ratio: auto;  }
+  .c-board__slot--1 { grid-area: s1;  }
+  .c-board__slot--2 { grid-area: s2;  }
+  .c-board__slot--3 { grid-area: s3;  }
+  .c-board__slot--4 { grid-area: s4;  }
 }
-.c-board__empty { font: italic 400 22px var(--serif); color: var(--ink-2); }
+.c-board__empty { font: 500 calc(22px * .6) var(--mono); color: var(--ink-2); }
 .c-board__label { @include label; position: absolute; left: 8px; top: 8px; color: var(--ink-2); }
 .c-board__missing { padding-block: 8px 24px; }
 .c-board__missing ul { display: grid; gap: 10px; }
@@ -61,9 +61,9 @@
   &:hover { border-color: var(--ink); }
   &[aria-selected="true"] { border: 2px solid var(--accent); }
 }
-.c-picker__item--none { place-items: center; font: italic 400 16px var(--serif); min-height: 96px; }
+.c-picker__item--none { place-items: center; font: 500 calc(16px * .6) var(--mono); min-height: 96px; }
 
 .c-saved { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 24px; margin-top: 16px; }
 .c-saved__lay { display: flex; flex-wrap: wrap; gap: 4px; padding: 12px; background: var(--paper-2); min-height: 120px; }
 .c-saved__lay img { width: calc(33% - 4px); aspect-ratio: 1; object-fit: contain; }
-.c-saved__name { font: italic 400 24px/1.1 var(--serif); margin-top: 8px; }
+.c-saved__name { font: 500 calc(24px * .6)/1.1 var(--mono); margin-top: 8px; }

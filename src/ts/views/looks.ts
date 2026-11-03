@@ -12,13 +12,14 @@ const total = (ps: LookItem[]) => ps.reduce((a, x) => a + euro(x), 0);
 const priceText = (x: LookItem) => (x.p == null ? "prijs op aanvraag" : x.cur === "¥" ? `¥${x.p}, ca. ${eur(x.p * RATE)}` : eur(x.p));
 
 export function looksHtml() {
-  return `<div class="c-looks__head"><h2 class="c-looks__title" id="looks-t">De <em>looks.</em></h2><span class="c-chapter__count">${S.look.dirs.length} outfits uit dit lookbook</span></div>` +
+  if (!S.look.dirs.length) return "";
+  return `<div class="c-looks__head"><h2 class="c-looks__title" id="looks-t">De looks</h2><span class="c-chapter__count">${S.look.dirs.length} outfits uit dit lookbook</span></div>` +
     S.look.dirs.map((d, i) => {
       const ps = pieces(i);
       return `<article class="c-look" aria-labelledby="look-${i}">
   <div class="c-look__num" aria-hidden="true">${two(i + 1)}</div>
   <div><h3 class="c-look__name" id="look-${i}">${esc(d.n)}</h3><p class="c-look__when">${esc(d.when)}</p>${pal(d.pal)}
-    <p class="c-look__have">${ps.filter(haveOf).length} van ${ps.length} al in je kast · samen ca. ${eur(total(ps))}</p></div>
+    <p class="c-look__have">${ps.filter(haveOf).length} van ${ps.length} al in je kast${total(ps) ? ` · samen ca. ${eur(total(ps))}` : ""}</p></div>
   <button type="button" class="c-look__strip" data-look="${i}" tabindex="-1" aria-hidden="true">${ps.map((x) => `<span class="c-look__thumb">${sprite(x)}</span>`).join("")}</button>
   <button type="button" class="c-btn" data-look="${i}">Bekijk look ${two(i + 1)}</button>
 </article>`;
@@ -45,7 +46,7 @@ export function openOutfit(i: number) {
     <dl class="c-outfit__sum">
       <div><dt>Stukken</dt><dd>${ps.length}</dd></div>
       <div><dt>Al in je kast</dt><dd>${ps.filter(haveOf).length}</dd></div>
-      <div><dt>Samen ongeveer</dt><dd>${eur(total(ps))}</dd></div>
+      ${total(ps) ? `<div><dt>Samen ongeveer</dt><dd>${eur(total(ps))}</dd></div>` : ""}
     </dl>
     ${yuan ? `<p class="c-outfit__vibe">Yuanprijzen zijn omgerekend aan de middenkoers, zonder verzending, agentkosten, invoerrechten en btw.</p>` : ""}
     <div class="c-outfit__nav">

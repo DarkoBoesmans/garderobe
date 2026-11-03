@@ -1,6 +1,7 @@
 // Inloggen, account aanmaken (alleen voor uitgenodigde e-mails) en wachtwoord vergeten.
 import { sb } from "../supa";
 import { esc } from "../util";
+import { top } from "./top";
 
 type Mode = "in" | "up" | "reset" | "new";
 const TEXT: Record<Mode, [string, string, string]> = {
@@ -34,12 +35,13 @@ function nl(e: { message?: string; code?: string }) {
 
 export function showLogin(app: HTMLElement, mode: Mode = "in", note = "") {
   const [kicker, button, dek] = TEXT[mode];
-  const word = mode === "in" ? "garderobe." : mode === "up" ? "account." : "wachtwoord.";
+  const word = mode === "in" ? "garderobe" : mode === "up" ? "account" : "wachtwoord";
   app.innerHTML = `
 <a class="c-skip" href="#view">Naar het formulier</a>
+${top("../")}
 <main class="o-wrap c-login" id="view" tabindex="-1">
   <section class="c-hero">
-    <div><p class="c-hero__kicker"><a href="../">Garderobe</a></p><h1 class="c-hero__title">${kicker} <em>${word}</em></h1></div>
+    <div><h1 class="c-hero__title">${kicker} ${word}</h1></div>
     <form class="c-lock" id="auth" novalidate>
       <p class="c-hero__dek">${esc(dek)}</p>
       ${mode !== "new" ? `<label class="c-lock__label" for="email">E-mail</label>

@@ -57,7 +57,7 @@ export interface SizeSystem {
 export interface Person {
   key: "darko" | "lana" | "demo";
   /** Welk lookbook (data en sprites) deze persoon gebruikt; standaard de eigen key. */
-  book?: "darko" | "lana";
+  book?: "darko" | "lana" | "demo";
   name: string;
   issue: string;
   season: string;

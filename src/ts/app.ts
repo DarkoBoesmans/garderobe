@@ -7,15 +7,33 @@ import type { Lookbook } from "./types";
 import { info } from "./views/info";
 import { showLogin, startDemo } from "./views/login";
 import { startShell } from "./views/shell";
+import { top } from "./views/top";
 
 const app = document.getElementById("app")!;
 
 /** Het colofon (privacy) moet ook zonder account leesbaar zijn. */
 function showPrivacy() {
-  app.innerHTML = `<main id="view" class="o-wrap" tabindex="-1"></main>`;
+  app.innerHTML = `<a class="c-skip" href="#view">Naar de inhoud</a>${top("../")}<main id="view" class="o-wrap" tabindex="-1"></main>`;
   info.mount(document.getElementById("view")!);
 }
 window.addEventListener("hashchange", () => { if (!S.uid) location.hash === "#info" ? showPrivacy() : showLogin(app); });
+
+const EMPTY: Lookbook = { items: [], dirs: [], chapters: [], sheets: {} };
+
+/** De demo heeft een openbaar lookbook; de echte lookbooks staan privé in storage en zijn enkel na login leesbaar. */
+async function loadLook(book: string) {
+  if (book === "demo") {
+    S.look = (await (await fetch("data/demo.json")).json()) as Lookbook;
+    S.sheetUrl = Object.fromEntries(Object.keys(S.look.sheets).map((n) => [n, `sheets/demo/${n}.jpg`]));
+    return;
+  }
+  const { data, error } = await sb.storage.from("lookbook").download(`${book}/lookbook.json`);
+  S.look = error || !data ? EMPTY : (JSON.parse(await data.text()) as Lookbook);
+  const names = Object.keys(S.look.sheets);
+  if (!names.length) return;
+  const { data: urls } = await sb.storage.from("lookbook").createSignedUrls(names.map((n) => `${book}/${n}.jpg`), 43200);
+  S.sheetUrl = Object.fromEntries(names.map((n, i) => [n, urls?.[i]?.signedUrl ?? ""]));
+}
 
 async function boot() {
   // Terug van een bevestigings- of resetmail: de code inwisselen voor een sessie, dan uit de URL halen.
@@ -40,7 +58,7 @@ async function boot() {
   S.email = session.user.email ?? "";
   const { data: prof } = await sb.from("profiles").select("person").eq("id", S.uid).maybeSingle();
   S.person = PEOPLE[(prof?.person as keyof typeof PEOPLE) ?? "demo"] ?? PEOPLE.demo;
-  S.look = (await (await fetch(`data/${S.person.book ?? S.person.key}.json`)).json()) as Lookbook;
+  await loadLook(S.person.book ?? S.person.key);
   startShell(app);
   load().catch(() => { S.loaded = true; render(); });
 }

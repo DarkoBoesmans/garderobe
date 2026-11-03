@@ -16,7 +16,7 @@
 .c-hero__kicker { @include label; color: var(--ink-2); margin-bottom: 18px; position: relative; z-index: 1; }
 .c-hero__kicker a { display: inline-block; padding-block: 14px; margin-block: -14px; color: inherit; }
 .c-hero__kicker a:hover { color: var(--accent); }
-.c-hero__theme { font: italic 400 clamp(24px, 2.4vw, 32px)/1.1 var(--serif); margin-bottom: 14px; }
+.c-hero__theme { font: 500 clamp(16px, 1.4vw, 19px)/1.3 var(--mono); text-transform: uppercase; margin-bottom: 14px; }
 .c-hero__dek { color: var(--ink-2); max-width: 46ch; }
 .c-hero__dek code { font: 500 13px var(--sans); color: var(--ink); background: var(--paper-2); padding: 1px 5px; word-break: break-all; }
 .c-hero__facts {
@@ -28,4 +28,4 @@
   padding-top: 14px;
 }
 .c-hero__fact { @include label; color: var(--ink-2); }
-.c-hero__fact b { display: block; font: 400 40px/1 var(--serif); letter-spacing: 0; text-transform: none; color: var(--ink); margin-bottom: 4px; }
+.c-hero__fact b { display: block; font: 500 32px/1 var(--mono); letter-spacing: 0; text-transform: none; color: var(--ink); margin-bottom: 4px; }

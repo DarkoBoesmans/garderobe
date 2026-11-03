@@ -43,7 +43,7 @@ function adviceHtml(B: Body) {
   }).filter((x): x is string[] => !!x);
   const row = (what: string, size: string, why: string) =>
     `<div class="c-advice__row"><span class="c-advice__what">${esc(what)}</span><span class="c-advice__size">${esc(size)}</span><span class="c-advice__why">${esc(why)}</span></div>`;
-  return `<h2 class="c-advice__title">Jouw <em class="u-accent">maten.</em></h2>
+  return `<h2 class="c-advice__title">Jouw maten</h2>
 ${adv.length ? adv.map(([w, s, y, k]) => row(w, s, y + (inKast(k) ? ` In je kast: ${inKast(k)}.` : ""))).join("") : `<p class="c-empty">Vul borst, taille of voetlengte in voor je eerste maatadvies.</p>`}
 ${perBrand.length ? `<h3 class="c-maten__legend">Per merk</h3>${perBrand.map(([b, w, s, f]) => row(b!, s!, `${w}, valt ${f}.`)).join("")}` : ""}
 <p class="c-maten__hint">Algemene EU-tabel. Merken vallen verschillend: zet bij "Per merk" hoe een merk bij jou valt.</p>`;
@@ -55,7 +55,7 @@ export const maten: View = {
     const B = S.body, d = S.canWrite ? "" : " disabled", brands = [...new Set(brandKinds().map((x) => x[0]))];
     el.innerHTML = `
 <section class="c-hero">
-  <div><p class="c-hero__kicker">Wie je bent${B.measuredAt ? " · gemeten " + esc(fmtDate(B.measuredAt)) : ""}</p><h1 class="c-hero__title">Ma<em>ten.</em></h1></div>
+  <div><p class="c-hero__kicker">Wie je bent${B.measuredAt ? " · gemeten " + esc(fmtDate(B.measuredAt)) : ""}</p><h1 class="c-hero__title">Maten</h1></div>
   <div><p class="c-hero__theme">Tien minuten, één lintmeter.</p><p class="c-hero__dek">Meet over ondergoed of een dun T-shirt, met een spiegel of iemand die helpt. Elke maat die je invult geeft meteen advies, en het lookbook toont daarna bij elk stuk jouw maat.</p></div>
 </section>
 <div class="c-maten">

@@ -90,7 +90,7 @@ export const outfits: View = {
   mount(el) {
     el.innerHTML = `
 <section class="c-hero">
-  <div><p class="c-hero__kicker">Wat je draagt</p><h1 class="c-hero__title">Out<em>fits.</em></h1></div>
+  <div><p class="c-hero__kicker">Wat je draagt</p><h1 class="c-hero__title">Outfits</h1></div>
   <div><p class="c-hero__theme">Leg het neer zoals op je bed.</p>
   <p class="c-hero__dek">Tik een vak en kies een stuk. "Verras me" slaat over wat je de laatste dagen al droeg. Vanuit het lookbook vult "Maak deze look met wat ik heb" het bord voor je.</p></div>
 </section>

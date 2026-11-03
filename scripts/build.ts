@@ -4,12 +4,13 @@
 import { build } from "esbuild";
 import { compile } from "sass";
 import { landing } from "./landing.ts";
-import { cpSync, mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { top } from "../src/ts/views/top.ts";
+import { cpSync, mkdirSync, rmSync, writeFileSync } from "node:fs";
 
 const SUPA = "https://uubsuzhtpokskjfpcets.supabase.co";
 const FONTS = {
-  "instrument-serif-400.woff2": "@fontsource/instrument-serif/files/instrument-serif-latin-400-normal.woff2",
-  "instrument-serif-400-italic.woff2": "@fontsource/instrument-serif/files/instrument-serif-latin-400-italic.woff2",
+  "plex-mono-400.woff2": "@fontsource/ibm-plex-mono/files/ibm-plex-mono-latin-400-normal.woff2",
+  "plex-mono-500.woff2": "@fontsource/ibm-plex-mono/files/ibm-plex-mono-latin-500-normal.woff2",
   "archivo-wdth.woff2": "@fontsource-variable/archivo/files/archivo-latin-wdth-normal.woff2",
 };
 const DESC = "Een digitale kleerkast met uitgeknipte stukken, outfits, maten en een lookbook. Showcase van Darko Boesmans.";
@@ -37,8 +38,8 @@ const doc = (title: string, body: string, base = "", head = "", path: string | n
 <meta http-equiv="Content-Security-Policy" content="${CSP}"><meta name="referrer" content="strict-origin-when-cross-origin">
 ${path === null ? '<meta name="robots" content="noindex">' : `<link rel="canonical" href="${SITE}${path}">`}<title>${title}</title><meta name="description" content="${DESC}">
 <meta property="og:title" content="${title}"><meta property="og:description" content="${DESC}"><meta property="og:type" content="website"><meta property="og:url" content="${SITE}${path ?? ""}">
-<meta property="og:image" content="${SITE}og.png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta name="twitter:card" content="summary_large_image"><meta name="theme-color" content="#F6F6F3">
-<link rel="icon" href="${ICON}"><link rel="preload" href="${base}fonts/instrument-serif-400.woff2" as="font" type="font/woff2" crossorigin><link rel="stylesheet" href="${base}app.css">${head}</head>
+<meta property="og:image" content="${SITE}og.png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta name="twitter:card" content="summary_large_image"><meta name="theme-color" content="#FFFFFF">
+<link rel="icon" href="${ICON}"><link rel="preload" href="${base}fonts/plex-mono-500.woff2" as="font" type="font/woff2" crossorigin><link rel="stylesheet" href="${base}app.css">${head}</head>
 <body>${body}</body></html>
 `;
 
@@ -53,29 +54,27 @@ for (const dir of ["dist", "dist/app"]) {
   mkdirSync(`${dir}/fonts`, { recursive: true });
   for (const [to, from] of Object.entries(FONTS)) cpSync(`node_modules/${from}`, `${dir}/fonts/${to}`);
 }
-for (const book of ["darko", "lana"]) {
-  cpSync(`sheets/${book}`, `dist/app/sheets/${book}`, { recursive: true });
-  cpSync(`data/${book}-lookbook.json`, `dist/app/data/${book}.json`);
-}
+// Enkel het demo-lookbook is openbaar (Unsplash-foto's). De echte lookbooks staan privé in Supabase storage.
+cpSync("sheets/demo", "dist/app/sheets/demo", { recursive: true });
+cpSync("data/demo-lookbook.json", "dist/app/data/demo.json");
 cpSync("demo", "dist/app/demo", { recursive: true });
 cpSync("vault", "dist/app/vault", { recursive: true }); // ponytail: alleen voor de eenmalige import, daarna weg
 writeFileSync("dist/app/index.html", doc("Inloggen · Garderobe", `<div id="app"><main style="padding:24px"><h1>Garderobe</h1><p>De garderobe laadt…</p></main></div>`, "", `<script type="module" src="app.js"></script>`, "app/"));
 
 // Voorpagina en 404.
 writeFileSync("dist/.nojekyll", "");
-const count = (k: string) => (JSON.parse(readFileSync(`data/${k}-lookbook.json`, "utf8")) as { items: unknown[] }).items.length;
-writeFileSync("dist/index.html", doc("Garderobe · je kleerkast, uitgeknipt", landing(count("darko"), count("lana")),
-  "", `<link rel="preload" href="app/demo/denim-c-s.webp" as="image" fetchpriority="high">`).replace("<body>", `<body data-person="lana">`));
+writeFileSync("dist/index.html", doc("Garderobe", landing(),
+  "", `<link rel="preload" href="app/demo/denim-c-s.webp" as="image" fetchpriority="high">`));
 cpSync("static/og.png", "dist/og.png");
 writeFileSync("dist/robots.txt", `User-agent: *\nDisallow: /garderobe/app/\nSitemap: ${SITE}sitemap.xml\n`);
 writeFileSync("dist/sitemap.xml", `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"><url><loc>${SITE}</loc></url></urlset>\n`);
 writeFileSync("dist/404.html", doc("Niet gevonden · Garderobe", `
 <a class="c-skip" href="#main">Naar de inhoud</a>
-<main class="c-stand" id="main" tabindex="-1">
-  <header class="c-stand__head o-wrap">
-    <h1 class="c-stand__title">Niet in de <em>kast.</em></h1>
-    <p class="c-stand__dek">Deze pagina bestaat niet.</p>
-  </header>
-  <p class="o-wrap c-stand__acts"><a class="c-btn" href="/garderobe/">Naar de voorpagina</a> <a class="c-btn c-btn--ghost" href="/garderobe/app/#demo">Bekijk de demo</a></p>
-</main>`, "/garderobe/", "", null).replace("<body>", `<body data-person="lana">`));
+${top("/garderobe/")}
+<main class="c-lost o-wrap" id="main" tabindex="-1">
+  <p class="c-lost__code">404</p>
+  <h1 class="c-lost__title">Niet in de kast</h1>
+  <p>Deze pagina bestaat niet, of ze is verhuisd.</p>
+  <p class="c-lost__acts"><a class="c-btn" href="/garderobe/">Naar de voorpagina</a><a class="c-btn c-btn--ghost" href="/garderobe/app/#demo">Open de demo</a></p>
+</main>`, "/garderobe/", "", null));
 console.log("gebouwd: dist");
