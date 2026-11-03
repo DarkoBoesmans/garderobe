@@ -64,8 +64,7 @@ begin
   end if;
   return new;
 end $$;
-drop trigger if exists demo_item_cap on public.items;
-create trigger demo_item_cap before insert on public.items for each row execute function private.demo_item_cap();
+create or replace trigger demo_item_cap before insert on public.items for each row execute function private.demo_item_cap();
 
 create or replace function private.demo_upload_ok() returns boolean
 language sql stable security definer set search_path = '' as $$
@@ -75,8 +74,7 @@ $$;
 grant execute on function private.demo_upload_ok() to authenticated;
 grant execute on function private.is_demo() to authenticated;
 
-drop policy if exists "closet toevoegen" on storage.objects;
-create policy "closet toevoegen" on storage.objects for insert to authenticated
+alter policy "closet toevoegen" on storage.objects
   with check (bucket_id = 'closet' and private.can_write(((storage.foldername(name))[1])::uuid) and private.demo_upload_ok());
 
 -- Demo-accounts ouder dan 24 uur; enkel de opruimfunctie (service role) mag dit lezen.
@@ -86,3 +84,9 @@ language sql stable security definer set search_path = '' as $$
 $$;
 revoke all on function public.demo_expired() from public, anon, authenticated;
 grant execute on function public.demo_expired() to service_role;
+
+-- Elk uur opruimen (pg_cron + pg_net roepen de edge function demo-cleanup aan).
+create extension if not exists pg_cron;
+create extension if not exists pg_net with schema extensions;
+select cron.schedule('demo-cleanup', '17 * * * *',
+  $$ select net.http_post(url := 'https://uubsuzhtpokskjfpcets.supabase.co/functions/v1/demo-cleanup', headers := '{"Content-Type":"application/json"}'::jsonb, body := '{}'::jsonb) $$);
